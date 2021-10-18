@@ -12,6 +12,8 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -24,19 +26,34 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import com.begers.tariflerim.R;
+import com.begers.tariflerim.databinding.FragmentDashboardBinding;
+import com.begers.tariflerim.model.Tarif;
+import com.begers.tariflerim.roomdb.TarifDao;
+import com.begers.tariflerim.roomdb.TarifDatabase;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.io.ByteArrayOutputStream;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 
 public class DashboardFragment extends Fragment {
 
+    private FragmentDashboardBinding binding;
+    private CompositeDisposable compositeDisposable;
+
     ActivityResultLauncher<Intent> activityResultLauncher;  //galeriye gitmek için kullanılır
     ActivityResultLauncher<String> permissionLauncher;  //izin almak için kullanılır.
     Bitmap selectedImage;
 
-    ImageView imageView;
+    TarifDatabase db;
+    TarifDao tarifDao;
 
     public DashboardFragment() {
     }
@@ -44,24 +61,53 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        compositeDisposable = new CompositeDisposable();
+
+        db = Room.databaseBuilder(getActivity(), TarifDatabase.class, "Tarifler").build();
+        tarifDao = db.tarifDao();
+
         registerLauncher();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_dashboard, container, false);
+        binding = FragmentDashboardBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        imageView = view.findViewById(R.id.setScr);
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        binding.setScr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedImage(view);
             }
         });
+
+        binding.save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save(view);
+            }
+        });
+    }
+
+    public void save(View view){
+        Bitmap smallImage = makeSmallerImage(selectedImage,300);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        smallImage.compress(Bitmap.CompressFormat.PNG,50,outputStream);
+        byte[] bytes = outputStream.toByteArray();
+
+        Tarif tarif = new Tarif(binding.textName.getText().toString(), binding.textDescription.getText().toString(), bytes);
+        compositeDisposable.add(tarifDao.insert(tarif)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe()
+        );
     }
 
     public void selectedImage(View view){
@@ -94,7 +140,7 @@ public class DashboardFragment extends Fragment {
                     Intent intentFromResult = result.getData();
                     if (intentFromResult != null){
                         Uri imageData = intentFromResult.getData(); //kullanıcının seçtiği resmin kaynağını verir.
-                        imageView.setImageURI(imageData);
+                        binding.setScr.setImageURI(imageData);
 
                         try{
                             if (Build.VERSION.SDK_INT >= 28) {
@@ -128,4 +174,21 @@ public class DashboardFragment extends Fragment {
 
     }
 
+    public Bitmap makeSmallerImage(Bitmap image, int maximumSize) {
+
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float) width / (float) height;
+
+        if (bitmapRatio > 1) {
+            width = maximumSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maximumSize;
+            width = (int) (height * bitmapRatio);
+        }
+
+        return Bitmap.createScaledBitmap(image,width,height,true);
+    }
 }
