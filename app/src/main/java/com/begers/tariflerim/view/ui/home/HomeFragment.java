@@ -28,6 +28,8 @@ import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.functions.Predicate;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment {
@@ -57,14 +59,6 @@ public class HomeFragment extends Fragment {
         goster();
     }
 
-    public void handleResponse(List<Tarif> tarifs){
-        if (tarifs.size() > 0){
-            adapter = new TarifAdapter(tarifs);
-            binding.recyclerView.setAdapter(adapter);
-        }
-    }
-
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -77,5 +71,18 @@ public class HomeFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(HomeFragment.this::handleResponse)
         );
+    }
+
+    public void handleResponse(List<Tarif> tarifs){
+        if (tarifs.size() > 0){
+            adapter = new TarifAdapter(tarifs);
+            binding.recyclerView.setAdapter(adapter);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
     }
 }
