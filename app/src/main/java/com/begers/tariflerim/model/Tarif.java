@@ -12,6 +12,9 @@ public class Tarif {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    @ColumnInfo(name = "userId")
+    private int userId;
+
     @ColumnInfo(name = "name")
     private String name;
 
