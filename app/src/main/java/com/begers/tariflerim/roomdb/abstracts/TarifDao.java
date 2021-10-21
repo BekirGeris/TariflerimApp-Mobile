@@ -1,4 +1,4 @@
-package com.begers.tariflerim.roomdb;
+package com.begers.tariflerim.roomdb.abstracts;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
