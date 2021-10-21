@@ -18,7 +18,7 @@ public interface UserDao {
     @Query("SELECT * FROM User")
     Flowable<List<User>> getAll();
 
-    @Query("SELECT * FROM User WHERE User.id = id")
+    @Query("SELECT * FROM User WHERE User.id = :id")
     Flowable<User> getUserId(int id);
 
     @Insert

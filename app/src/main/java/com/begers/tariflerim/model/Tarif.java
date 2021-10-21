@@ -34,6 +34,14 @@ public class Tarif {
         return id;
     }
 
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

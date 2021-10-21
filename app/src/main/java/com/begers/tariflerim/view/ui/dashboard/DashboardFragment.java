@@ -61,7 +61,7 @@ public class DashboardFragment extends Fragment {
 
         compositeDisposable = new CompositeDisposable();
 
-        db = Room.databaseBuilder(getActivity(), TarifDatabase.class, "Tarifler").build();
+        db = TarifDatabase.getInstance(getContext());
         tarifDao = db.tarifDao();
 
         registerLauncher();

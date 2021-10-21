@@ -18,7 +18,7 @@ public interface ImageDao {
     @Query("SELECT * FROM Image")
     Flowable<List<Image>> getAll();
 
-    @Query("SELECT * FROM Image WHERE Image.userId = userId")
+    @Query("SELECT * FROM Image WHERE Image.userId = :userId")
     Flowable<Image> getImageUserId(int userId);
 
     @Insert

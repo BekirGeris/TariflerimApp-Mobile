@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         compositeDisposable = new CompositeDisposable();
 
-        db = Room.databaseBuilder(getActivity(), TarifDatabase.class, "Tarifler").build();
+        db = TarifDatabase.getInstance(getContext());
         tarifDao = db.tarifDao();
 
         goster();
