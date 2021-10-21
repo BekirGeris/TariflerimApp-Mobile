@@ -1,13 +1,9 @@
 package com.begers.tariflerim.view.ui.home;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,21 +11,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.room.Room;
 
-import com.begers.tariflerim.R;
 import com.begers.tariflerim.adapter.TarifAdapter;
 import com.begers.tariflerim.databinding.FragmentHomeBinding;
 import com.begers.tariflerim.model.Tarif;
-import com.begers.tariflerim.roomdb.TarifDao;
-import com.begers.tariflerim.roomdb.TarifDatabase;
-import com.begers.tariflerim.view.MainActivity;
-import com.begers.tariflerim.view.ui.dashboard.DashboardFragment;
+import com.begers.tariflerim.roomdb.abstracts.TarifDao;
+import com.begers.tariflerim.roomdb.concoretes.TarifDatabase;
 
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.functions.Function;
-import io.reactivex.rxjava3.functions.Predicate;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment {

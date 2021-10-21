@@ -12,9 +12,6 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -28,11 +25,10 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 
-import com.begers.tariflerim.R;
 import com.begers.tariflerim.databinding.FragmentDashboardBinding;
 import com.begers.tariflerim.model.Tarif;
-import com.begers.tariflerim.roomdb.TarifDao;
-import com.begers.tariflerim.roomdb.TarifDatabase;
+import com.begers.tariflerim.roomdb.abstracts.TarifDao;
+import com.begers.tariflerim.roomdb.concoretes.TarifDatabase;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
@@ -56,6 +52,7 @@ public class DashboardFragment extends Fragment {
     TarifDao tarifDao;
 
     public DashboardFragment() {
+
     }
 
     @Override

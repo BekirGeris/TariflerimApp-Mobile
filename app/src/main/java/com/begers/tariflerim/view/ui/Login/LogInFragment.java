@@ -12,13 +12,18 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.room.Room;
 
 import com.begers.tariflerim.R;
 import com.begers.tariflerim.databinding.FragmentLoginBinding;
+import com.begers.tariflerim.model.User;
+import com.begers.tariflerim.roomdb.abstracts.UserDao;
+import com.begers.tariflerim.roomdb.concoretes.UserDatabase;
 
 public class LogInFragment extends Fragment {
 
     private FragmentLoginBinding binding;
+
     public LogInFragment(){
 
     }
