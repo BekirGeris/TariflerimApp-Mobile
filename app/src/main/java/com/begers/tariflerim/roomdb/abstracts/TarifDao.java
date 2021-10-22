@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.begers.tariflerim.model.Tarif;
 
@@ -20,6 +21,9 @@ public interface TarifDao {
 
     @Insert
     Completable insert(Tarif tarif);
+
+    @Update
+    Completable update(Tarif tarif);
 
     @Delete
     Completable delete(Tarif tarif);

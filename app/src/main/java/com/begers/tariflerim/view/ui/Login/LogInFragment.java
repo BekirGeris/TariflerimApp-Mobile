@@ -1,5 +1,6 @@
 package com.begers.tariflerim.view.ui.Login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.begers.tariflerim.databinding.FragmentLoginBinding;
 import com.begers.tariflerim.model.User;
 import com.begers.tariflerim.roomdb.abstracts.UserDao;
 import com.begers.tariflerim.roomdb.concoretes.UserDatabase;
+import com.begers.tariflerim.view.MainActivity;
 
 public class LogInFragment extends Fragment {
 
@@ -48,6 +50,14 @@ public class LogInFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 saveUser();
+            }
+        });
+
+        binding.loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getApplication(), MainActivity.class);
+                startActivity(intent);
             }
         });
     }

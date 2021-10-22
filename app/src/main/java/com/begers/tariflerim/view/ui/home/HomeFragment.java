@@ -16,11 +16,14 @@ import com.begers.tariflerim.databinding.FragmentHomeBinding;
 import com.begers.tariflerim.model.Tarif;
 import com.begers.tariflerim.roomdb.abstracts.TarifDao;
 import com.begers.tariflerim.roomdb.concoretes.TarifDatabase;
+import com.begers.tariflerim.viewModel.TarifViewModel;
 
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment {
@@ -32,6 +35,8 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     private TarifAdapter adapter;
+
+    private TarifViewModel tarifViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
@@ -47,7 +52,11 @@ public class HomeFragment extends Fragment {
         db = TarifDatabase.getInstance(getContext());
         tarifDao = db.tarifDao();
 
-        goster();
+        compositeDisposable.add(tarifDao.getAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(HomeFragment.this::handleResponse)
+        );
     }
 
     @Override
@@ -56,19 +65,9 @@ public class HomeFragment extends Fragment {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    public void goster(){
-        compositeDisposable.add(tarifDao.getAll()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(HomeFragment.this::handleResponse)
-        );
-    }
-
     public void handleResponse(List<Tarif> tarifs){
-        if (tarifs.size() > 0){
-            adapter = new TarifAdapter(tarifs);
-            binding.recyclerView.setAdapter(adapter);
-        }
+        adapter = new TarifAdapter(tarifs);
+        binding.recyclerView.setAdapter(adapter);
     }
 
     @Override
