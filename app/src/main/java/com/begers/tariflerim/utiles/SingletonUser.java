@@ -4,7 +4,7 @@ import com.begers.tariflerim.model.User;
 
 public class SingletonUser {
 
-    private User sentUser;
+    private static User sentUser;
 
     private static SingletonUser singletonUser;
 
@@ -13,6 +13,9 @@ public class SingletonUser {
     }
 
     public User getSentUser(){
+        if (sentUser == null){
+            sentUser = new User("Default", "Default", "Default", "Default");
+        }
         return sentUser;
     }
 
@@ -25,5 +28,9 @@ public class SingletonUser {
             singletonUser = new SingletonUser();
         }
         return singletonUser;
+    }
+
+    public void clearUser(){
+        this.sentUser = null;
     }
 }
