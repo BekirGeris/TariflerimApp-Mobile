@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
@@ -25,18 +26,19 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 
-import com.begers.tariflerim.R;
 import com.begers.tariflerim.databinding.FragmentNotificationsBinding;
+import com.begers.tariflerim.model.Image;
 import com.begers.tariflerim.model.User;
+import com.begers.tariflerim.roomdb.abstracts.ImageDao;
 import com.begers.tariflerim.roomdb.abstracts.UserDao;
+import com.begers.tariflerim.roomdb.concoretes.ImageDatabase;
 import com.begers.tariflerim.roomdb.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.List;
+import java.io.ByteArrayOutputStream;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -48,8 +50,14 @@ public class NotificationsFragment extends Fragment {
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    private UserDatabase db;
+    private UserDatabase userDatabase;
     private UserDao userDao;
+
+    private ImageDatabase imageDatabase;
+    private ImageDao imageDao;
+
+    SingletonUser singletonUser;
+    User user;
 
     ActivityResultLauncher<Intent> activityResultLauncher;  //galeriye gitmek için kullanılır
     ActivityResultLauncher<String> permissionLauncher;  //izin almak için kullanılır.
@@ -59,22 +67,35 @@ public class NotificationsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SingletonUser singletonUser = SingletonUser.getInstance();
-        User user = singletonUser.getSentUser();
+        singletonUser = SingletonUser.getInstance();
+        user = singletonUser.getSentUser();
 
-        db = Room.databaseBuilder(getContext(), UserDatabase.class, "User").build();
-        userDao = db.userDao();
+        userDatabase = Room.databaseBuilder(getContext(), UserDatabase.class, "User").build();
+        userDao = userDatabase.userDao();
 
-        System.out.println(user.getFirstName());
-        compositeDisposable.add(userDao.getUserId(1)
+        imageDatabase = Room.databaseBuilder(getContext(), ImageDatabase.class, "Image").build();
+        imageDao = imageDatabase.imageDao();
+
+        compositeDisposable.add(userDao.getUserId(user.getId())
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(NotificationsFragment.this::handleResponse)
+        .subscribe(NotificationsFragment.this::handleResponseUser)
+        );
+
+        compositeDisposable.add(imageDao.getImageUserId(user.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(NotificationsFragment.this::handleResponseImage)
         );
     }
 
-    public void handleResponse(User user){
+    public void handleResponseUser(User user){
         binding.userName.setText(user.getFirstName());
+    }
+
+    public void handleResponseImage(Image image){
+        Bitmap bitmap = BitmapFactory.decodeByteArray(image.getProfileImage(), 0, image.getProfileImage().length);
+        binding.circleImageView.setImageBitmap(bitmap);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -116,6 +137,22 @@ public class NotificationsFragment extends Fragment {
         }
     }
 
+    private void save(){
+        Bitmap smallImage = makeSmallerImage(selectedImage,300);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        smallImage.compress(Bitmap.CompressFormat.PNG,50,outputStream);
+        byte[] bytes = outputStream.toByteArray();
+
+        Image image = new Image(user.getId(), bytes);
+
+        compositeDisposable.add(imageDao.insert(image)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+        );
+    }
+
     private void registerLauncher(){  //tanımlamalar yapılacak
 
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -127,6 +164,8 @@ public class NotificationsFragment extends Fragment {
                         Uri imageData = intentFromResult.getData(); //kullanıcının seçtiği resmin kaynağını verir.
                         binding.circleImageView.setImageURI(imageData);
 
+                        Toast.makeText(getActivity(), "Seçim Tamamlandı", Toast.LENGTH_LONG).show();
+
                         try{
                             if (Build.VERSION.SDK_INT >= 28) {
                                 ImageDecoder.Source source = ImageDecoder.createSource(getActivity().getContentResolver(), imageData);
@@ -134,6 +173,7 @@ public class NotificationsFragment extends Fragment {
                             }else {
                                 selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageData);
                             }
+                            save();
                             //binding.imageView.setImageBitmap(selectedImage);
                         }catch (Exception e){
                             e.printStackTrace();
