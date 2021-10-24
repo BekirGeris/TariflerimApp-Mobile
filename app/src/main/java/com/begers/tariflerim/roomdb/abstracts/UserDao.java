@@ -21,6 +21,9 @@ public interface UserDao {
     @Query("SELECT * FROM User WHERE User.id = :id")
     Flowable<User> getUserId(int id);
 
+    @Query("SELECT * FROM User WHERE User.email = :email AND User.password = :password")
+    Flowable<User> getUserEmailAndPassword(String email, String password);
+
     @Insert
     Completable insert(User user);
 

@@ -99,7 +99,7 @@ public class DashboardFragment extends Fragment {
         smallImage.compress(Bitmap.CompressFormat.PNG,50,outputStream);
         byte[] bytes = outputStream.toByteArray();
 
-        Tarif tarif = new Tarif(binding.textName.getText().toString(), binding.textDescription.getText().toString(), bytes);
+        Tarif tarif = new Tarif(binding.textName.getText().toString(),1, binding.textDescription.getText().toString(), bytes);
         compositeDisposable.add(tarifDao.insert(tarif)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())

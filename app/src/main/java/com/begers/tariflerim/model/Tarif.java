@@ -24,8 +24,9 @@ public class Tarif {
     @ColumnInfo(name = "image")
     private byte[] image;
 
-    public Tarif(String name, String tarif, byte[] image) {
+    public Tarif(String name,int userId, String tarif, byte[] image) {
         this.name = name;
+        this.userId = userId;
         this.tarif = tarif;
         this.image = image;
     }

@@ -52,17 +52,19 @@ public class HomeFragment extends Fragment {
         db = TarifDatabase.getInstance(getContext());
         tarifDao = db.tarifDao();
 
-        compositeDisposable.add(tarifDao.getAll()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(HomeFragment.this::handleResponse)
-        );
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        compositeDisposable.add(tarifDao.getAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(HomeFragment.this::handleResponse)
+        );
     }
 
     public void handleResponse(List<Tarif> tarifs){
