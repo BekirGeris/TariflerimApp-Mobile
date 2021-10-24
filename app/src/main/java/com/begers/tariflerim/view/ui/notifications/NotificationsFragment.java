@@ -23,10 +23,22 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import com.begers.tariflerim.R;
 import com.begers.tariflerim.databinding.FragmentNotificationsBinding;
+import com.begers.tariflerim.model.User;
+import com.begers.tariflerim.roomdb.abstracts.UserDao;
+import com.begers.tariflerim.roomdb.concoretes.UserDatabase;
+import com.begers.tariflerim.utiles.SingletonUser;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -34,9 +46,36 @@ public class NotificationsFragment extends Fragment {
 
     FragmentNotificationsBinding binding;
 
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    private UserDatabase db;
+    private UserDao userDao;
+
     ActivityResultLauncher<Intent> activityResultLauncher;  //galeriye gitmek için kullanılır
     ActivityResultLauncher<String> permissionLauncher;  //izin almak için kullanılır.
     Bitmap selectedImage;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        SingletonUser singletonUser = SingletonUser.getInstance();
+        User user = singletonUser.getSentUser();
+
+        db = Room.databaseBuilder(getContext(), UserDatabase.class, "User").build();
+        userDao = db.userDao();
+
+        System.out.println(user.getFirstName());
+        compositeDisposable.add(userDao.getUserId(1)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(NotificationsFragment.this::handleResponse)
+        );
+    }
+
+    public void handleResponse(User user){
+        binding.userName.setText(user.getFirstName());
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
@@ -53,6 +92,7 @@ public class NotificationsFragment extends Fragment {
                 selectedImage(view);
             }
         });
+
     }
 
     public void selectedImage(View view){
