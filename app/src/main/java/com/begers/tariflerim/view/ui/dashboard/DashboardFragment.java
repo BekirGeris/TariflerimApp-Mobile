@@ -27,8 +27,10 @@ import androidx.room.Room;
 
 import com.begers.tariflerim.databinding.FragmentDashboardBinding;
 import com.begers.tariflerim.model.Tarif;
+import com.begers.tariflerim.model.User;
 import com.begers.tariflerim.roomdb.abstracts.TarifDao;
 import com.begers.tariflerim.roomdb.concoretes.TarifDatabase;
+import com.begers.tariflerim.utiles.SingletonUser;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
@@ -51,6 +53,9 @@ public class DashboardFragment extends Fragment {
     TarifDatabase db;
     TarifDao tarifDao;
 
+    SingletonUser singletonUser;
+    User user;
+
     public DashboardFragment() {
 
     }
@@ -58,6 +63,9 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        singletonUser = SingletonUser.getInstance();
+        user = singletonUser.getSentUser();
 
         compositeDisposable = new CompositeDisposable();
 
@@ -99,7 +107,7 @@ public class DashboardFragment extends Fragment {
         smallImage.compress(Bitmap.CompressFormat.PNG,50,outputStream);
         byte[] bytes = outputStream.toByteArray();
 
-        Tarif tarif = new Tarif(binding.textName.getText().toString(),1, binding.textDescription.getText().toString(), bytes);
+        Tarif tarif = new Tarif(binding.textName.getText().toString(),user.getId(), binding.textDescription.getText().toString(), bytes);
         compositeDisposable.add(tarifDao.insert(tarif)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())

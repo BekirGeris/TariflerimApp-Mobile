@@ -19,6 +19,9 @@ public interface TarifDao {
     @Query("SELECT * FROM Tarifler")
     Flowable<List<Tarif>> getAll();
 
+    @Query("SELECT * FROM Tarifler WHERE Tarifler.userId = :userId")
+    Flowable<List<Tarif>> getTarifsUserId(int userId);
+
     @Insert
     Completable insert(Tarif tarif);
 
