@@ -24,19 +24,27 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.room.Room;
 
+import com.begers.tariflerim.adapter.TarifAdapter;
+import com.begers.tariflerim.adapter.TarifGritAdapter;
 import com.begers.tariflerim.databinding.FragmentNotificationsBinding;
 import com.begers.tariflerim.model.Image;
+import com.begers.tariflerim.model.Tarif;
 import com.begers.tariflerim.model.User;
 import com.begers.tariflerim.roomdb.abstracts.ImageDao;
+import com.begers.tariflerim.roomdb.abstracts.TarifDao;
 import com.begers.tariflerim.roomdb.abstracts.UserDao;
 import com.begers.tariflerim.roomdb.concoretes.ImageDatabase;
+import com.begers.tariflerim.roomdb.concoretes.TarifDatabase;
 import com.begers.tariflerim.roomdb.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -55,6 +63,9 @@ public class NotificationsFragment extends Fragment {
 
     private ImageDatabase imageDatabase;
     private ImageDao imageDao;
+
+    private TarifDatabase tarifDatabase;
+    private TarifDao tarifDao;
 
     SingletonUser singletonUser;
     User user;
@@ -76,6 +87,9 @@ public class NotificationsFragment extends Fragment {
         imageDatabase = Room.databaseBuilder(getContext(), ImageDatabase.class, "Image").build();
         imageDao = imageDatabase.imageDao();
 
+        tarifDatabase = Room.databaseBuilder(getContext(), TarifDatabase.class, "Tarifler").build();
+        tarifDao = tarifDatabase.tarifDao();
+
         compositeDisposable.add(userDao.getUserId(user.getId())
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -87,6 +101,12 @@ public class NotificationsFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(NotificationsFragment.this::handleResponseImage)
         );
+
+        compositeDisposable.add(tarifDao.getTarifsUserId(user.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(NotificationsFragment.this::handleResponseTarif)
+        );
     }
 
     public void handleResponseUser(User user){
@@ -96,6 +116,12 @@ public class NotificationsFragment extends Fragment {
     public void handleResponseImage(Image image){
         Bitmap bitmap = BitmapFactory.decodeByteArray(image.getProfileImage(), 0, image.getProfileImage().length);
         binding.circleImageView.setImageBitmap(bitmap);
+    }
+
+    public void handleResponseTarif(List<Tarif> tarifs){
+        binding.recyclerViewGrit.setLayoutManager(new LinearLayoutManager(getContext()));
+        TarifGritAdapter tarifGritAdapter = new TarifGritAdapter(tarifs);
+        binding.recyclerViewGrit.setAdapter(tarifGritAdapter);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

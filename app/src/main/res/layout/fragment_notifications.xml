@@ -39,4 +39,14 @@
         app:layout_constraintStart_toEndOf="@+id/circleImageView"
         app:layout_constraintTop_toBottomOf="@+id/userName" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewGrit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/circleImageView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
