@@ -119,7 +119,8 @@ public class NotificationsFragment extends Fragment {
     }
 
     public void handleResponseTarif(List<Tarif> tarifs){
-        binding.recyclerViewGrit.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.tarifSize.setText("Tarif Sayısı: " + tarifs.size());
+        binding.recyclerViewGrit.setLayoutManager(new GridLayoutManager(this.getContext(), 3));
         TarifGritAdapter tarifGritAdapter = new TarifGritAdapter(tarifs);
         binding.recyclerViewGrit.setAdapter(tarifGritAdapter);
     }
@@ -239,6 +240,9 @@ public class NotificationsFragment extends Fragment {
             height = maximumSize;
             width = (int) (height * bitmapRatio);
         }
+
+        height = 120;
+        width = 120;
 
         return Bitmap.createScaledBitmap(image,width,height,true);
     }
