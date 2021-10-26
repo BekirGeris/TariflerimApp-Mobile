@@ -13,9 +13,16 @@ import androidx.room.Room;
 
 import com.begers.tariflerim.adapter.TarifAdapter;
 import com.begers.tariflerim.databinding.FragmentHomeBinding;
+import com.begers.tariflerim.model.Image;
 import com.begers.tariflerim.model.Tarif;
+import com.begers.tariflerim.model.User;
+import com.begers.tariflerim.roomdb.abstracts.ImageDao;
 import com.begers.tariflerim.roomdb.abstracts.TarifDao;
+import com.begers.tariflerim.roomdb.abstracts.UserDao;
+import com.begers.tariflerim.roomdb.concoretes.ImageDatabase;
 import com.begers.tariflerim.roomdb.concoretes.TarifDatabase;
+import com.begers.tariflerim.roomdb.concoretes.UserDatabase;
+import com.begers.tariflerim.utiles.SingletonUser;
 import com.begers.tariflerim.viewModel.TarifViewModel;
 
 import java.util.List;
@@ -51,8 +58,6 @@ public class HomeFragment extends Fragment {
 
         db = TarifDatabase.getInstance(getContext());
         tarifDao = db.tarifDao();
-
-
     }
 
     @Override
@@ -63,12 +68,12 @@ public class HomeFragment extends Fragment {
         compositeDisposable.add(tarifDao.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(HomeFragment.this::handleResponse)
+                .subscribe(HomeFragment.this::handleResponseTarif)
         );
     }
 
-    public void handleResponse(List<Tarif> tarifs){
-        adapter = new TarifAdapter(tarifs);
+    public void handleResponseTarif(List<Tarif> tarifs){
+        adapter = new TarifAdapter(tarifs, getContext());
         binding.recyclerView.setAdapter(adapter);
     }
 
