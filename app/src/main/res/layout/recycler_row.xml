@@ -1,29 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="#E8E6E6"
+    android:layout_margin="2dp"
     android:orientation="vertical"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/recyclerView_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:text="title"
-        android:layout_margin="5dp"/>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circleUserPp"
+        android:layout_margin="5dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_baseline_person_24"/>
 
     <ImageView
         android:id="@+id/recyclerView_imageView"
         android:layout_width="match_parent"
-        android:layout_height="300dp"/>
+        android:layout_height="300dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/circleUserPp"
+        tools:layout_editor_absoluteX="5dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView_imageView"
+        android:src="@drawable/like"/>
+
+    <TextView
+        android:id="@+id/recyclerView_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginStart="20dp"
+        android:text="title"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView_description"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView_imageView"
+        app:layout_constraintVertical_bias="0.333" />
 
     <TextView
         android:id="@+id/recyclerView_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
+        android:layout_margin="5dp"
         android:text="description"
-        android:layout_margin="5dp"/>
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        tools:layout_editor_absoluteX="-4dp" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/textUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="TextView"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/circleUserPp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/postDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="TextView"
+        android:textSize="15sp"
+        app:layout_constraintStart_toEndOf="@+id/circleUserPp"
+        app:layout_constraintTop_toBottomOf="@+id/textUserName" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
