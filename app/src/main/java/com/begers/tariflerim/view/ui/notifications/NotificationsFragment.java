@@ -241,9 +241,6 @@ public class NotificationsFragment extends Fragment {
             width = (int) (height * bitmapRatio);
         }
 
-        height = 120;
-        width = 120;
-
         return Bitmap.createScaledBitmap(image,width,height,true);
     }
 }
