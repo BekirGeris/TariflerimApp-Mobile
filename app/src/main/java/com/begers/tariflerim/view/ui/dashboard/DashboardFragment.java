@@ -9,9 +9,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -20,23 +22,36 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.room.Room;
 
+import com.begers.tariflerim.R;
 import com.begers.tariflerim.databinding.FragmentDashboardBinding;
 import com.begers.tariflerim.model.Tarif;
 import com.begers.tariflerim.model.User;
 import com.begers.tariflerim.roomdb.abstracts.TarifDao;
 import com.begers.tariflerim.roomdb.concoretes.TarifDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
+import com.begers.tariflerim.view.MainActivity;
+import com.begers.tariflerim.view.ui.home.HomeFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.functions.Action;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
@@ -101,18 +116,34 @@ public class DashboardFragment extends Fragment {
     }
 
     public void save(View view){
-        Bitmap smallImage = makeSmallerImage(selectedImage,300);
+        String tarifName = binding.textName.getText().toString();
+        String tarifDec = binding.textDescription.getText().toString();
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        smallImage.compress(Bitmap.CompressFormat.PNG,50,outputStream);
-        byte[] bytes = outputStream.toByteArray();
+        if (tarifName.equals("") || tarifDec.equals("") || selectedImage == null){
+            Toast.makeText(getActivity(), "Bilgileri Boş Bırakmayınız", Toast.LENGTH_LONG).show();
+        }else {
+            Bitmap smallImage = makeSmallerImage(selectedImage,300);
 
-        Tarif tarif = new Tarif(binding.textName.getText().toString(),user.getId(), binding.textDescription.getText().toString(), bytes);
-        compositeDisposable.add(tarifDao.insert(tarif)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe()
-        );
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            smallImage.compress(Bitmap.CompressFormat.PNG,50,outputStream);
+            byte[] bytes = outputStream.toByteArray();
+
+            Tarif tarif = new Tarif(tarifName, user.getId(), tarifDec, bytes);
+
+            compositeDisposable.add(tarifDao.insert(tarif)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action() {
+                        @Override
+                        public void run() throws Throwable {
+                            Toast.makeText(getActivity(), "Tarif Yayınlandı", Toast.LENGTH_LONG).show();
+
+                            NavDirections action = DashboardFragmentDirections.actionNavigationDashboardToNavigationHome();
+                            Navigation.findNavController(view).navigate(action);
+                        }
+                    })
+            );
+        }
     }
 
     public void selectedImage(View view){
