@@ -1,5 +1,8 @@
 package com.begers.tariflerim.view.ui.Login;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +24,8 @@ import com.begers.tariflerim.model.User;
 import com.begers.tariflerim.roomdb.abstracts.UserDao;
 import com.begers.tariflerim.roomdb.concoretes.TarifDatabase;
 import com.begers.tariflerim.roomdb.concoretes.UserDatabase;
+import com.begers.tariflerim.utiles.SingletonUser;
+import com.begers.tariflerim.view.MainActivity;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -36,6 +41,8 @@ public class SignInFragment extends Fragment {
     private UserDatabase db;
     private UserDao userDao;
 
+    SharedPreferences preferences;
+
     public SignInFragment(){
 
     }
@@ -43,6 +50,8 @@ public class SignInFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        preferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
 
         db = Room.databaseBuilder(getContext(), UserDatabase.class, "User").build();
         userDao = db.userDao();
@@ -86,6 +95,7 @@ public class SignInFragment extends Fragment {
         String email = binding.editTextTextEmailAddressSignin.getText().toString();
         String password = binding.editTextTextPasswordSignin.getText().toString();
         String passwordAgain = binding.editTextTextPasswordAgain.getText().toString();
+
         if (fisrtName.equals("") || lastName.equals("") || email.equals("") || password.equals("")){
             Toast.makeText(getActivity(), "Bilgileri tam doldurunuz", Toast.LENGTH_SHORT).show();
         }else {
@@ -93,6 +103,9 @@ public class SignInFragment extends Fragment {
                 Toast.makeText(getActivity(), "Parolaları aynı giriniz", Toast.LENGTH_SHORT).show();
             }else {
                 User user = new User(fisrtName, lastName, email, password);
+
+
+
                 compositeDisposable.add(userDao.insert(user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -100,8 +113,25 @@ public class SignInFragment extends Fragment {
                     @Override
                     public void run() throws Throwable {
                         Toast.makeText(getActivity(),   "Kayıt Başarılı", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(intent);
                     }
                 })
+                );
+
+                compositeDisposable.add(userDao.getUserEmailAndPassword(email, password)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(user1 -> {
+
+                            SingletonUser singletonUser = SingletonUser.getInstance();
+                            singletonUser.setSentUser(user1);
+
+                            System.err.println(singletonUser.getSentUser().getId());
+                            preferences.edit().putInt("userId", user1.getId()).apply();
+
+                        })
                 );
             }
         }

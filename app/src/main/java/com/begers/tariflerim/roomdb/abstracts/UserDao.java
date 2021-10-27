@@ -24,6 +24,9 @@ public interface UserDao {
     @Query("SELECT * FROM User WHERE User.email = :email AND User.password = :password")
     Flowable<User> getUserEmailAndPassword(String email, String password);
 
+    @Query("SELECT Case when count(*) < 1 then 0 else 1 end as bool_value From User Where User.email = :email AND User.password = :password")
+    Flowable<Boolean> getBoolEmailAndPassword(String email, String password);
+
     @Insert
     Completable insert(User user);
 
