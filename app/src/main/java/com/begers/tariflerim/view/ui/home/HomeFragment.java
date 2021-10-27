@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,9 +24,14 @@ import com.begers.tariflerim.roomdb.concoretes.ImageDatabase;
 import com.begers.tariflerim.roomdb.concoretes.TarifDatabase;
 import com.begers.tariflerim.roomdb.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
+import com.begers.tariflerim.utiles.TarifComparator;
 import com.begers.tariflerim.viewModel.TarifViewModel;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.SortedMap;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -68,6 +74,11 @@ public class HomeFragment extends Fragment {
         compositeDisposable.add(tarifDao.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .map(unsortedList -> {
+                    List<Tarif> sortedList = new ArrayList<>(unsortedList);
+                    Collections.sort(sortedList, new TarifComparator());
+                    return sortedList;
+                })
                 .subscribe(HomeFragment.this::handleResponseTarif)
         );
     }

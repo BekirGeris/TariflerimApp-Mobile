@@ -1,10 +1,16 @@
 package com.begers.tariflerim.model;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.sql.Blob;
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.util.Date;
 
 @Entity(tableName = "Tarifler")
 public class Tarif {
@@ -18,6 +24,9 @@ public class Tarif {
     @ColumnInfo(name = "name")
     private String name;
 
+    @ColumnInfo(name = "date")
+    private Date date;
+
     @ColumnInfo(name = "tarif")
     private String tarif;
 
@@ -29,6 +38,15 @@ public class Tarif {
         this.userId = userId;
         this.tarif = tarif;
         this.image = image;
+        this.date = new Date();
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public int getId() {
