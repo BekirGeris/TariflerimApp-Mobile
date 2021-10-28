@@ -121,4 +121,9 @@ public class LogInFragment extends Fragment {
         Navigation.findNavController(view).navigate(action);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
+    }
 }

@@ -242,4 +242,10 @@ public class NotificationsFragment extends Fragment {
 
         return Bitmap.createScaledBitmap(image,width,height,true);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
+    }
 }
