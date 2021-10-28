@@ -61,15 +61,15 @@ public class DashboardFragment extends Fragment {
     private FragmentDashboardBinding binding;
     private CompositeDisposable compositeDisposable;
 
-    ActivityResultLauncher<Intent> activityResultLauncher;  //galeriye gitmek için kullanılır
-    ActivityResultLauncher<String> permissionLauncher;  //izin almak için kullanılır.
-    Bitmap selectedImage;
+    private ActivityResultLauncher<Intent> activityResultLauncher;  //galeriye gitmek için kullanılır
+    private ActivityResultLauncher<String> permissionLauncher;  //izin almak için kullanılır.
+    private Bitmap selectedImage;
 
-    TarifDatabase db;
-    TarifDao tarifDao;
+    private TarifDatabase db;
+    private TarifDao tarifDao;
 
-    SingletonUser singletonUser;
-    User user;
+    private SingletonUser singletonUser;
+    private User user;
 
     public DashboardFragment() {
 
@@ -92,8 +92,7 @@ public class DashboardFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -137,7 +136,6 @@ public class DashboardFragment extends Fragment {
                         @Override
                         public void run() throws Throwable {
                             Toast.makeText(getActivity(), "Tarif Yayınlandı", Toast.LENGTH_LONG).show();
-
                             NavDirections action = DashboardFragmentDirections.actionNavigationDashboardToNavigationHome();
                             Navigation.findNavController(view).navigate(action);
                         }
@@ -185,7 +183,6 @@ public class DashboardFragment extends Fragment {
                             }else {
                                 selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageData);
                             }
-                            //binding.imageView.setImageBitmap(selectedImage);
                         }catch (Exception e){
                             e.printStackTrace();
                         }

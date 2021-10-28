@@ -36,12 +36,12 @@ public class SignInFragment extends Fragment {
 
     private FragmentSigninBinding binding;
 
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private UserDatabase db;
     private UserDao userDao;
 
-    SharedPreferences preferences;
+    private SharedPreferences preferences;
 
     public SignInFragment(){
 
@@ -61,6 +61,7 @@ public class SignInFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         binding.goLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,8 +81,7 @@ public class SignInFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSigninBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-        return view;
+        return binding.getRoot();
     }
 
     public void goLogIn(View view){
@@ -103,8 +103,6 @@ public class SignInFragment extends Fragment {
                 Toast.makeText(getActivity(), "Parolaları aynı giriniz", Toast.LENGTH_SHORT).show();
             }else {
                 User user = new User(fisrtName, lastName, email, password);
-
-
 
                 compositeDisposable.add(userDao.insert(user)
                 .subscribeOn(Schedulers.io())

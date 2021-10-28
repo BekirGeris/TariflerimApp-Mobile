@@ -25,7 +25,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class MainActivity extends AppCompatActivity {
 
-    SharedPreferences preferences;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

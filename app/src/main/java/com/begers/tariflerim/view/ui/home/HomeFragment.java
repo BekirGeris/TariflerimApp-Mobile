@@ -41,9 +41,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment {
 
-    private CompositeDisposable compositeDisposable;
-    TarifDatabase db;
-    TarifDao tarifDao;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();;
+    private TarifDatabase db;
+    private TarifDao tarifDao;
 
     private FragmentHomeBinding binding;
 
@@ -60,7 +60,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        compositeDisposable = new CompositeDisposable();
 
         db = TarifDatabase.getInstance(getContext());
         tarifDao = db.tarifDao();

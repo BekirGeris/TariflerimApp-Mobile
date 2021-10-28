@@ -54,9 +54,9 @@ import static android.app.Activity.RESULT_OK;
 
 public class NotificationsFragment extends Fragment {
 
-    FragmentNotificationsBinding binding;
+    private FragmentNotificationsBinding binding;
 
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private UserDatabase userDatabase;
     private UserDao userDao;
@@ -67,12 +67,12 @@ public class NotificationsFragment extends Fragment {
     private TarifDatabase tarifDatabase;
     private TarifDao tarifDao;
 
-    SingletonUser singletonUser;
-    User user;
+    private SingletonUser singletonUser;
+    private User user;
 
-    ActivityResultLauncher<Intent> activityResultLauncher;  //galeriye gitmek için kullanılır
-    ActivityResultLauncher<String> permissionLauncher;  //izin almak için kullanılır.
-    Bitmap selectedImage;
+    private ActivityResultLauncher<Intent> activityResultLauncher;  //galeriye gitmek için kullanılır
+    private ActivityResultLauncher<String> permissionLauncher;  //izin almak için kullanılır.
+    private Bitmap selectedImage;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -201,7 +201,6 @@ public class NotificationsFragment extends Fragment {
                                 selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageData);
                             }
                             save();
-                            //binding.imageView.setImageBitmap(selectedImage);
                         }catch (Exception e){
                             e.printStackTrace();
                         }

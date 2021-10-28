@@ -38,7 +38,7 @@ public class LogInFragment extends Fragment {
     private UserDatabase db;
     private UserDao userDao;
 
-    SharedPreferences preferences;
+    private SharedPreferences preferences;
 
     public LogInFragment(){
 
