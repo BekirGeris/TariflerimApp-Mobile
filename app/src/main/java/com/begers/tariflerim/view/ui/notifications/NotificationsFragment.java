@@ -24,23 +24,23 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.room.Room;
 
-import com.begers.tariflerim.adapter.TarifAdapter;
 import com.begers.tariflerim.adapter.TarifGritAdapter;
 import com.begers.tariflerim.databinding.FragmentNotificationsBinding;
 import com.begers.tariflerim.model.Image;
 import com.begers.tariflerim.model.Tarif;
 import com.begers.tariflerim.model.User;
-import com.begers.tariflerim.roomdb.abstracts.ImageDao;
-import com.begers.tariflerim.roomdb.abstracts.TarifDao;
-import com.begers.tariflerim.roomdb.abstracts.UserDao;
-import com.begers.tariflerim.roomdb.concoretes.ImageDatabase;
-import com.begers.tariflerim.roomdb.concoretes.TarifDatabase;
-import com.begers.tariflerim.roomdb.concoretes.UserDatabase;
+import com.begers.tariflerim.service.abstracts.ImageDao;
+import com.begers.tariflerim.service.abstracts.TarifDao;
+import com.begers.tariflerim.service.abstracts.UserDao;
+import com.begers.tariflerim.service.concoretes.ImageDatabase;
+import com.begers.tariflerim.service.concoretes.TarifDatabase;
+import com.begers.tariflerim.service.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
+import com.begers.tariflerim.viewModel.NotificationsViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
@@ -54,18 +54,8 @@ import static android.app.Activity.RESULT_OK;
 
 public class NotificationsFragment extends Fragment {
 
+    private NotificationsViewModel viewModel;
     private FragmentNotificationsBinding binding;
-
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-
-    private UserDatabase userDatabase;
-    private UserDao userDao;
-
-    private ImageDatabase imageDatabase;
-    private ImageDao imageDao;
-
-    private TarifDatabase tarifDatabase;
-    private TarifDao tarifDao;
 
     private SingletonUser singletonUser;
     private User user;
@@ -77,52 +67,6 @@ public class NotificationsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        singletonUser = SingletonUser.getInstance();
-        user = singletonUser.getSentUser();
-
-        userDatabase = Room.databaseBuilder(getContext(), UserDatabase.class, "User").build();
-        userDao = userDatabase.userDao();
-
-        imageDatabase = Room.databaseBuilder(getContext(), ImageDatabase.class, "Image").build();
-        imageDao = imageDatabase.imageDao();
-
-        tarifDatabase = Room.databaseBuilder(getContext(), TarifDatabase.class, "Tarifler").build();
-        tarifDao = tarifDatabase.tarifDao();
-
-        compositeDisposable.add(userDao.getUserId(user.getId())
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(NotificationsFragment.this::handleResponseUser)
-        );
-
-        compositeDisposable.add(imageDao.getImageUserId(user.getId())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(NotificationsFragment.this::handleResponseImage)
-        );
-
-        compositeDisposable.add(tarifDao.getTarifsUserId(user.getId())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(NotificationsFragment.this::handleResponseTarif)
-        );
-    }
-
-    public void handleResponseUser(User user){
-        binding.userName.setText(user.getFirstName());
-    }
-
-    public void handleResponseImage(Image image){
-        Bitmap bitmap = BitmapFactory.decodeByteArray(image.getProfileImage(), 0, image.getProfileImage().length);
-        binding.circleImageView.setImageBitmap(bitmap);
-    }
-
-    public void handleResponseTarif(List<Tarif> tarifs){
-        binding.tarifSize.setText("Tarif Sayısı: " + tarifs.size());
-        binding.recyclerViewGrit.setLayoutManager(new GridLayoutManager(this.getContext(), 3));
-        TarifGritAdapter tarifGritAdapter = new TarifGritAdapter(tarifs);
-        binding.recyclerViewGrit.setAdapter(tarifGritAdapter);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -133,7 +77,15 @@ public class NotificationsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.recyclerViewGrit.setLayoutManager(new GridLayoutManager(this.getContext(), 3));
+
+        viewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
+
+        singletonUser = SingletonUser.getInstance();
+        user = singletonUser.getSentUser();
+
         registerLauncher();
+
         binding.circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,6 +93,28 @@ public class NotificationsFragment extends Fragment {
             }
         });
 
+        binding.userName.setText(user.getFirstName());
+
+        viewModel.getByImage(user);
+
+        viewModel.getByTarifs(user);
+
+        observerLiveData();
+    }
+
+    private void observerLiveData(){
+        viewModel.getTarifs().observe(getViewLifecycleOwner(), tarifs -> {
+            binding.tarifSize.setText("Tarif Sayısı: " + tarifs.size());
+            TarifGritAdapter tarifGritAdapter = new TarifGritAdapter(tarifs);
+            binding.recyclerViewGrit.setAdapter(tarifGritAdapter);
+        });
+
+        viewModel.getImage().observe(getViewLifecycleOwner(), image -> {
+            if (image != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(image.getProfileImage(), 0, image.getProfileImage().length);
+                binding.circleImageView.setImageBitmap(bitmap);
+            }
+        });
     }
 
     public void selectedImage(View view){
@@ -173,11 +147,7 @@ public class NotificationsFragment extends Fragment {
 
         Image image = new Image(user.getId(), bytes);
 
-        compositeDisposable.add(imageDao.insert(image)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
-        );
+        viewModel.insertImage(image, binding.getRoot());
     }
 
     private void registerLauncher(){  //tanımlamalar yapılacak
@@ -200,7 +170,9 @@ public class NotificationsFragment extends Fragment {
                             }else {
                                 selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageData);
                             }
+
                             save();
+
                         }catch (Exception e){
                             e.printStackTrace();
                         }
@@ -243,9 +215,4 @@ public class NotificationsFragment extends Fragment {
         return Bitmap.createScaledBitmap(image,width,height,true);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        compositeDisposable.dispose();
-    }
 }

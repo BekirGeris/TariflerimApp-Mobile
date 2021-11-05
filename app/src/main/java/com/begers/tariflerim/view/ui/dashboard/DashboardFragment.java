@@ -9,11 +9,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -22,29 +20,20 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.room.Room;
 
-import com.begers.tariflerim.R;
 import com.begers.tariflerim.databinding.FragmentDashboardBinding;
 import com.begers.tariflerim.model.Tarif;
 import com.begers.tariflerim.model.User;
-import com.begers.tariflerim.roomdb.abstracts.TarifDao;
-import com.begers.tariflerim.roomdb.concoretes.TarifDatabase;
+import com.begers.tariflerim.service.abstracts.TarifDao;
+import com.begers.tariflerim.service.concoretes.TarifDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
-import com.begers.tariflerim.view.MainActivity;
-import com.begers.tariflerim.view.ui.home.HomeFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.begers.tariflerim.viewModel.DashboardViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
@@ -58,15 +47,13 @@ import static android.app.Activity.RESULT_OK;
 
 public class DashboardFragment extends Fragment {
 
+    private DashboardViewModel viewModel;
+
     private FragmentDashboardBinding binding;
-    private CompositeDisposable compositeDisposable;
 
     private ActivityResultLauncher<Intent> activityResultLauncher;  //galeriye gitmek için kullanılır
     private ActivityResultLauncher<String> permissionLauncher;  //izin almak için kullanılır.
     private Bitmap selectedImage;
-
-    private TarifDatabase db;
-    private TarifDao tarifDao;
 
     private SingletonUser singletonUser;
     private User user;
@@ -82,11 +69,6 @@ public class DashboardFragment extends Fragment {
         singletonUser = SingletonUser.getInstance();
         user = singletonUser.getSentUser();
 
-        compositeDisposable = new CompositeDisposable();
-
-        db = TarifDatabase.getInstance(getContext());
-        tarifDao = db.tarifDao();
-
         registerLauncher();
     }
 
@@ -98,6 +80,8 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
         binding.setScr.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,18 +113,8 @@ public class DashboardFragment extends Fragment {
 
             Tarif tarif = new Tarif(tarifName, user.getId(), tarifDec, bytes);
 
-            compositeDisposable.add(tarifDao.insert(tarif)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action() {
-                        @Override
-                        public void run() throws Throwable {
-                            Toast.makeText(getActivity(), "Tarif Yayınlandı", Toast.LENGTH_LONG).show();
-                            NavDirections action = DashboardFragmentDirections.actionNavigationDashboardToNavigationHome();
-                            Navigation.findNavController(view).navigate(action);
-                        }
-                    })
-            );
+            viewModel.insertTarif(tarif, view);
+
         }
     }
 
@@ -225,9 +199,4 @@ public class DashboardFragment extends Fragment {
         return Bitmap.createScaledBitmap(image,width,height,true);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        compositeDisposable.dispose();
-    }
 }
