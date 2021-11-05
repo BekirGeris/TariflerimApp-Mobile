@@ -19,8 +19,8 @@ import androidx.room.Room;
 
 import com.begers.tariflerim.R;
 import com.begers.tariflerim.databinding.FragmentLoginBinding;
-import com.begers.tariflerim.roomdb.abstracts.UserDao;
-import com.begers.tariflerim.roomdb.concoretes.UserDatabase;
+import com.begers.tariflerim.service.abstracts.UserDao;
+import com.begers.tariflerim.service.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
 import com.begers.tariflerim.view.MainActivity;
 

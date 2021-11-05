@@ -1,4 +1,4 @@
-package com.begers.tariflerim.roomdb.concoretes;
+package com.begers.tariflerim.service.concoretes;
 
 import android.content.Context;
 
@@ -7,7 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.begers.tariflerim.model.Image;
-import com.begers.tariflerim.roomdb.abstracts.ImageDao;
+import com.begers.tariflerim.service.abstracts.ImageDao;
 
 @Database(entities = {Image.class}, version = 1)
 public abstract class ImageDatabase extends RoomDatabase {
@@ -16,7 +16,7 @@ public abstract class ImageDatabase extends RoomDatabase {
 
     public abstract ImageDao imageDao();
 
-    public static ImageDatabase getInstance(Context context){
+    public static synchronized ImageDatabase getInstance(Context context){
         if (instance == null){
             instance = Room.databaseBuilder(context, ImageDatabase.class, "Image").build();
         }

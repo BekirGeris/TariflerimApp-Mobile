@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -15,12 +14,10 @@ import com.begers.tariflerim.databinding.RecyclerRowBinding;
 import com.begers.tariflerim.model.Image;
 import com.begers.tariflerim.model.Tarif;
 import com.begers.tariflerim.model.User;
-import com.begers.tariflerim.roomdb.abstracts.ImageDao;
-import com.begers.tariflerim.roomdb.abstracts.UserDao;
-import com.begers.tariflerim.roomdb.concoretes.ImageDatabase;
-import com.begers.tariflerim.roomdb.concoretes.UserDatabase;
-import com.begers.tariflerim.view.MainActivity;
-import com.begers.tariflerim.view.ui.notifications.NotificationsFragment;
+import com.begers.tariflerim.service.abstracts.ImageDao;
+import com.begers.tariflerim.service.abstracts.UserDao;
+import com.begers.tariflerim.service.concoretes.ImageDatabase;
+import com.begers.tariflerim.service.concoretes.UserDatabase;
 
 import java.util.Date;
 import java.util.List;

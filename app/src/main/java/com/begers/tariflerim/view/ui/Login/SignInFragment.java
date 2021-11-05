@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavDirections;
@@ -21,9 +20,8 @@ import androidx.room.Room;
 import com.begers.tariflerim.R;
 import com.begers.tariflerim.databinding.FragmentSigninBinding;
 import com.begers.tariflerim.model.User;
-import com.begers.tariflerim.roomdb.abstracts.UserDao;
-import com.begers.tariflerim.roomdb.concoretes.TarifDatabase;
-import com.begers.tariflerim.roomdb.concoretes.UserDatabase;
+import com.begers.tariflerim.service.abstracts.UserDao;
+import com.begers.tariflerim.service.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
 import com.begers.tariflerim.view.MainActivity;
 

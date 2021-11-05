@@ -1,11 +1,6 @@
 package com.begers.tariflerim.view.ui.Login;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.customview.widget.Openable;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.room.Room;
 
 import android.content.Context;
@@ -14,11 +9,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.begers.tariflerim.R;
-import com.begers.tariflerim.roomdb.abstracts.UserDao;
-import com.begers.tariflerim.roomdb.concoretes.UserDatabase;
+import com.begers.tariflerim.service.abstracts.UserDao;
+import com.begers.tariflerim.service.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
 import com.begers.tariflerim.view.MainActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
