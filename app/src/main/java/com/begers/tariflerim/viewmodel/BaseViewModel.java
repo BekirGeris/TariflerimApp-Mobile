@@ -1,4 +1,4 @@
-package com.begers.tariflerim.viewModel;
+package com.begers.tariflerim.viewmodel;
 
 import android.app.Application;
 

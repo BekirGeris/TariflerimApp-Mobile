@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
-import androidx.room.Room;
 
 import com.begers.tariflerim.R;
 import com.begers.tariflerim.databinding.FragmentLoginBinding;
@@ -47,17 +46,16 @@ public class LogInFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        preferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
-
-        db = Room.databaseBuilder(requireContext(), UserDatabase.class, "User").build();
-        userDao = db.userDao();
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        preferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+
+        db = UserDatabase.getInstance(getContext());
+        userDao = db.userDao();
 
         binding.goSignin.setOnClickListener(new View.OnClickListener() {
             @Override

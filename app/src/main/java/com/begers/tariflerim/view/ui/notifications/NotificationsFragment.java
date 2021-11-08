@@ -26,29 +26,16 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.room.Room;
 
 import com.begers.tariflerim.adapter.TarifGritAdapter;
 import com.begers.tariflerim.databinding.FragmentNotificationsBinding;
 import com.begers.tariflerim.model.Image;
-import com.begers.tariflerim.model.Tarif;
 import com.begers.tariflerim.model.User;
-import com.begers.tariflerim.service.abstracts.ImageDao;
-import com.begers.tariflerim.service.abstracts.TarifDao;
-import com.begers.tariflerim.service.abstracts.UserDao;
-import com.begers.tariflerim.service.concoretes.ImageDatabase;
-import com.begers.tariflerim.service.concoretes.TarifDatabase;
-import com.begers.tariflerim.service.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
-import com.begers.tariflerim.viewModel.NotificationsViewModel;
+import com.begers.tariflerim.viewmodel.NotificationsViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
-import java.util.List;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 

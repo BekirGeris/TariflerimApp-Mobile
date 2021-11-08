@@ -1,18 +1,13 @@
-package com.begers.tariflerim.viewModel;
+package com.begers.tariflerim.viewmodel;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.begers.tariflerim.model.Tarif;
 import com.begers.tariflerim.service.abstracts.TarifDao;
 import com.begers.tariflerim.service.concoretes.TarifDatabase;
 import com.begers.tariflerim.utiles.TarifComparator;
-import com.begers.tariflerim.view.ui.home.HomeFragment;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,8 +16,6 @@ import java.util.List;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import kotlin.coroutines.CoroutineContext;
-import kotlinx.coroutines.CoroutineScope;
 
 public class HomeViewModel extends BaseViewModel {
 

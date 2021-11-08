@@ -1,59 +1,23 @@
 package com.begers.tariflerim.view.ui.Login;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.begers.tariflerim.R;
-import com.begers.tariflerim.service.abstracts.UserDao;
-import com.begers.tariflerim.service.concoretes.UserDatabase;
-import com.begers.tariflerim.utiles.SingletonUser;
-import com.begers.tariflerim.view.MainActivity;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
+import com.begers.tariflerim.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private LoginViewModel viewModel;
     private SharedPreferences preferences;
-
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-
-    private UserDatabase db;
-    private UserDao userDao;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        db = Room.databaseBuilder(getApplicationContext(), UserDatabase.class, "User").build();
-        userDao = db.userDao();
-
-        preferences = this.getSharedPreferences("pref", Context.MODE_PRIVATE);
-
-        compositeDisposable.add(userDao.getUserId(preferences.getInt("userId", -1))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(user -> {
-                    SingletonUser singletonUser = SingletonUser.getInstance();
-                    singletonUser.setSentUser(user);
-
-                    Intent intent = new Intent(this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                })
-        );
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        compositeDisposable.dispose();
+        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        viewModel.createSingletonUser(this, savedInstanceState);
     }
 }

@@ -24,24 +24,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 
 import com.begers.tariflerim.databinding.FragmentDashboardBinding;
 import com.begers.tariflerim.model.Tarif;
 import com.begers.tariflerim.model.User;
-import com.begers.tariflerim.service.abstracts.TarifDao;
-import com.begers.tariflerim.service.concoretes.TarifDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
-import com.begers.tariflerim.viewModel.DashboardViewModel;
+import com.begers.tariflerim.viewmodel.DashboardViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.functions.Action;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 

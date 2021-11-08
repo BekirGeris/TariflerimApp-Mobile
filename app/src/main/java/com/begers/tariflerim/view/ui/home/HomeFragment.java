@@ -13,19 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.begers.tariflerim.adapter.TarifAdapter;
 import com.begers.tariflerim.databinding.FragmentHomeBinding;
-import com.begers.tariflerim.model.Tarif;
-import com.begers.tariflerim.service.abstracts.TarifDao;
-import com.begers.tariflerim.service.concoretes.TarifDatabase;
-import com.begers.tariflerim.utiles.TarifComparator;
-import com.begers.tariflerim.viewModel.HomeViewModel;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
+import com.begers.tariflerim.viewmodel.HomeViewModel;
 
 public class HomeFragment extends Fragment {
 

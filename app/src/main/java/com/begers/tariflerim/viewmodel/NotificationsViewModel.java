@@ -1,14 +1,11 @@
-package com.begers.tariflerim.viewModel;
+package com.begers.tariflerim.viewmodel;
 
 import android.app.Application;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.room.Room;
 
 import com.begers.tariflerim.model.Image;
 import com.begers.tariflerim.model.Tarif;
@@ -19,7 +16,6 @@ import com.begers.tariflerim.service.abstracts.UserDao;
 import com.begers.tariflerim.service.concoretes.ImageDatabase;
 import com.begers.tariflerim.service.concoretes.TarifDatabase;
 import com.begers.tariflerim.service.concoretes.UserDatabase;
-import com.begers.tariflerim.view.ui.notifications.NotificationsFragment;
 
 import java.util.List;
 
