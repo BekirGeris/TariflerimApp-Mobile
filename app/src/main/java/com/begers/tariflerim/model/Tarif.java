@@ -27,16 +27,12 @@ public class Tarif {
     @ColumnInfo(name = "date")
     private Date date;
 
-    @ColumnInfo(name = "tarif")
-    private String tarif;
-
     @ColumnInfo(name = "image")
     private byte[] image;
 
     public Tarif(String name,int userId, String tarif, byte[] image) {
         this.name = name;
         this.userId = userId;
-        this.tarif = tarif;
         this.image = image;
         this.date = new Date();
     }
@@ -71,14 +67,6 @@ public class Tarif {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getTarif() {
-        return tarif;
-    }
-
-    public void setTarif(String tarif) {
-        this.tarif = tarif;
     }
 
     public byte[] getImage() {

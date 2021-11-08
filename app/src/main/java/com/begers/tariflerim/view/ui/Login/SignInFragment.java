@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -24,6 +25,7 @@ import com.begers.tariflerim.service.abstracts.UserDao;
 import com.begers.tariflerim.service.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
 import com.begers.tariflerim.view.MainActivity;
+import com.begers.tariflerim.viewmodel.LoginViewModel;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -33,13 +35,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class SignInFragment extends Fragment {
 
     private FragmentSigninBinding binding;
-
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-
-    private UserDatabase db;
-    private UserDao userDao;
-
-    private SharedPreferences preferences;
+    private LoginViewModel viewModel;
 
     public SignInFragment(){
 
@@ -48,17 +44,19 @@ public class SignInFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
-        preferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
-
-        db = Room.databaseBuilder(getContext(), UserDatabase.class, "User").build();
-        userDao = db.userDao();
-
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentSigninBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         binding.goLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,13 +71,38 @@ public class SignInFragment extends Fragment {
                 saveUser();
             }
         });
+
+        observerLiveData();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentSigninBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+    private void observerLiveData() {
+        viewModel.getIsCheckRecord().observe(getViewLifecycleOwner(), isCheckRecord -> {
+            if (isCheckRecord) {
+                Toast.makeText(getActivity(), "Kayıt Başarılı", Toast.LENGTH_SHORT).show();
+                goMainActivity();
+            }
+        });
+    }
+
+    public void saveUser() {
+        String firstName = binding.editTextFirstName.getText().toString();
+        String lastName = binding.editTextLastName.getText().toString();
+        String email = binding.editTextTextEmailAddressSignin.getText().toString();
+        String password = binding.editTextTextPasswordSignin.getText().toString();
+        String passwordAgain = binding.editTextTextPasswordAgain.getText().toString();
+
+        if (firstName.equals("") || lastName.equals("") || email.equals("") || password.equals("") || passwordAgain.equals("")){
+            Toast.makeText(getActivity(), "Bilgileri tam doldurunuz", Toast.LENGTH_SHORT).show();
+        }else {
+            if (password.equals(passwordAgain)){
+                User user = new User(firstName, lastName, email, password);
+
+                viewModel.insertUser(user);
+                viewModel.createSingletonUserWithEmailAndPassword(email, password);
+            }else {
+                Toast.makeText(getActivity(), "Parolaları aynı giriniz", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void goLogIn(View view){
@@ -87,50 +110,9 @@ public class SignInFragment extends Fragment {
         Navigation.findNavController(view).navigate(action);
     }
 
-    public void saveUser() {
-        String fisrtName = binding.editTextFirstName.getText().toString();
-        String lastName = binding.editTextLastName.getText().toString();
-        String email = binding.editTextTextEmailAddressSignin.getText().toString();
-        String password = binding.editTextTextPasswordSignin.getText().toString();
-        String passwordAgain = binding.editTextTextPasswordAgain.getText().toString();
-
-        if (fisrtName.equals("") || lastName.equals("") || email.equals("") || password.equals("")){
-            Toast.makeText(getActivity(), "Bilgileri tam doldurunuz", Toast.LENGTH_SHORT).show();
-        }else {
-            if (password.equals(passwordAgain) == false){
-                Toast.makeText(getActivity(), "Parolaları aynı giriniz", Toast.LENGTH_SHORT).show();
-            }else {
-                User user = new User(fisrtName, lastName, email, password);
-
-                compositeDisposable.add(userDao.insert(user)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action() {
-                    @Override
-                    public void run() throws Throwable {
-                        Toast.makeText(getActivity(),   "Kayıt Başarılı", Toast.LENGTH_SHORT).show();
-
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        startActivity(intent);
-                    }
-                })
-                );
-
-                compositeDisposable.add(userDao.getUserEmailAndPassword(email, password)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(user1 -> {
-
-                            SingletonUser singletonUser = SingletonUser.getInstance();
-                            singletonUser.setSentUser(user1);
-
-                            System.err.println(singletonUser.getSentUser().getId());
-                            preferences.edit().putInt("userId", user1.getId()).apply();
-
-                        })
-                );
-            }
-        }
-
+    private void goMainActivity(){
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
     }
+
 }
