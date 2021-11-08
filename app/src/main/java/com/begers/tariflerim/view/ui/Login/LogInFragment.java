@@ -1,8 +1,6 @@
 package com.begers.tariflerim.view.ui.Login;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +17,8 @@ import androidx.navigation.Navigation;
 
 import com.begers.tariflerim.R;
 import com.begers.tariflerim.databinding.FragmentLoginBinding;
-import com.begers.tariflerim.service.abstracts.UserDao;
-import com.begers.tariflerim.service.concoretes.UserDatabase;
 import com.begers.tariflerim.view.MainActivity;
 import com.begers.tariflerim.viewmodel.LoginViewModel;
-
-
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 
 public class LogInFragment extends Fragment {

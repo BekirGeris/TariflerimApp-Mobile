@@ -10,12 +10,12 @@ import androidx.lifecycle.MutableLiveData;
 import com.begers.tariflerim.model.Image;
 import com.begers.tariflerim.model.Tarif;
 import com.begers.tariflerim.model.User;
-import com.begers.tariflerim.service.abstracts.ImageDao;
-import com.begers.tariflerim.service.abstracts.TarifDao;
-import com.begers.tariflerim.service.abstracts.UserDao;
-import com.begers.tariflerim.service.concoretes.ImageDatabase;
-import com.begers.tariflerim.service.concoretes.TarifDatabase;
-import com.begers.tariflerim.service.concoretes.UserDatabase;
+import com.begers.tariflerim.service.local.abstracts.ImageDao;
+import com.begers.tariflerim.service.local.abstracts.TarifDao;
+import com.begers.tariflerim.service.local.abstracts.UserDao;
+import com.begers.tariflerim.service.local.concoretes.ImageDatabase;
+import com.begers.tariflerim.service.local.concoretes.TarifDatabase;
+import com.begers.tariflerim.service.local.concoretes.UserDatabase;
 
 import java.util.List;
 

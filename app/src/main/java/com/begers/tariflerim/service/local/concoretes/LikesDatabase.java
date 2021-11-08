@@ -1,4 +1,4 @@
-package com.begers.tariflerim.service.concoretes;
+package com.begers.tariflerim.service.local.concoretes;
 
 import android.content.Context;
 
@@ -7,7 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.begers.tariflerim.model.Likes;
-import com.begers.tariflerim.service.abstracts.LikesDao;
+import com.begers.tariflerim.service.local.abstracts.LikesDao;
 
 @Database(entities = {Likes.class}, version = 1)
 public abstract class LikesDatabase extends RoomDatabase {

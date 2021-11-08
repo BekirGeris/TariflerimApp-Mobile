@@ -9,8 +9,8 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.begers.tariflerim.model.Tarif;
-import com.begers.tariflerim.service.abstracts.TarifDao;
-import com.begers.tariflerim.service.concoretes.TarifDatabase;
+import com.begers.tariflerim.service.local.abstracts.TarifDao;
+import com.begers.tariflerim.service.local.concoretes.TarifDatabase;
 import com.begers.tariflerim.view.ui.dashboard.DashboardFragmentDirections;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;

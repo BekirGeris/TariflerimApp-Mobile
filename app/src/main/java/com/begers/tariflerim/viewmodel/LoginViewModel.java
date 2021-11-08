@@ -8,8 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.begers.tariflerim.model.User;
-import com.begers.tariflerim.service.abstracts.UserDao;
-import com.begers.tariflerim.service.concoretes.UserDatabase;
+import com.begers.tariflerim.service.local.abstracts.UserDao;
+import com.begers.tariflerim.service.local.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;

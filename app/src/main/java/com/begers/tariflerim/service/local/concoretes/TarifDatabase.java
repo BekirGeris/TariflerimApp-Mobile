@@ -1,4 +1,4 @@
-package com.begers.tariflerim.service.concoretes;
+package com.begers.tariflerim.service.local.concoretes;
 
 import android.content.Context;
 
@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.begers.tariflerim.model.Tarif;
-import com.begers.tariflerim.service.abstracts.TarifDao;
+import com.begers.tariflerim.service.local.abstracts.TarifDao;
 import com.begers.tariflerim.utiles.Converters;
 
 @Database(entities = {Tarif.class}, version = 1)

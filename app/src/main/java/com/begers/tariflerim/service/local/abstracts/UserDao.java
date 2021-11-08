@@ -1,4 +1,4 @@
-package com.begers.tariflerim.service.abstracts;
+package com.begers.tariflerim.service.local.abstracts;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
