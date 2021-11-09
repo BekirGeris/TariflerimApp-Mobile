@@ -7,17 +7,27 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.begers.tariflerim.model.Tarif;
 import com.begers.tariflerim.model.User;
+import com.begers.tariflerim.model.dtos.RecipeDto;
+import com.begers.tariflerim.service.http.concoretes.RecipeService;
 import com.begers.tariflerim.service.local.abstracts.UserDao;
 import com.begers.tariflerim.service.local.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
 
+import java.util.List;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.observers.DisposableSingleObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class LoginViewModel extends BaseViewModel {
+
+    private RecipeService recipeService = new RecipeService();
 
     private SharedPreferences preferences;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -33,6 +43,17 @@ public class LoginViewModel extends BaseViewModel {
         preferences = application.getSharedPreferences("pref", Context.MODE_PRIVATE);
         db = UserDatabase.getInstance(getApplication());
         userDao = db.userDao();
+
+        /*
+        compositeDisposable.add(recipeService.getAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Tarif>>() {
+                    @Override
+                    public void accept(List<Tarif> tarifs) throws Throwable {
+                        System.out.println(tarifs.get(0).getName());
+                    }
+                }));          */
     }
 
     public void createSingletonUserWithPreferences(){

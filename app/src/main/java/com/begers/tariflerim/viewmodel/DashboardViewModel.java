@@ -9,6 +9,7 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.begers.tariflerim.model.Tarif;
+import com.begers.tariflerim.service.http.concoretes.RecipeService;
 import com.begers.tariflerim.service.local.abstracts.TarifDao;
 import com.begers.tariflerim.service.local.concoretes.TarifDatabase;
 import com.begers.tariflerim.view.ui.dashboard.DashboardFragmentDirections;
@@ -16,9 +17,12 @@ import com.begers.tariflerim.view.ui.dashboard.DashboardFragmentDirections;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class DashboardViewModel extends BaseViewModel {
+
+    private RecipeService recipeService = new RecipeService();
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
