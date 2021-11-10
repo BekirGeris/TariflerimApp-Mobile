@@ -16,7 +16,6 @@ import com.begers.tariflerim.service.local.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
 
 import java.util.List;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
