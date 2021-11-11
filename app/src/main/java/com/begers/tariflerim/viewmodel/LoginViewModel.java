@@ -16,11 +16,14 @@ import com.begers.tariflerim.service.local.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
 
 import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.functions.Consumer;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Action;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.observers.DisposableSingleObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -43,16 +46,30 @@ public class LoginViewModel extends BaseViewModel {
         db = UserDatabase.getInstance(getApplication());
         userDao = db.userDao();
 
-        /*
-        compositeDisposable.add(recipeService.getAll()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Tarif>>() {
+    recipeService.getAll()
+                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(new Observer<RecipeDto>() {
                     @Override
-                    public void accept(List<Tarif> tarifs) throws Throwable {
-                        System.out.println(tarifs.get(0).getName());
+                    public void onSubscribe(@io.reactivex.annotations.NonNull io.reactivex.disposables.Disposable d) {
+                        System.out.println("onSubscribe");
                     }
-                }));          */
+
+                    @Override
+                    public void onNext(@io.reactivex.annotations.NonNull RecipeDto recipeDto) {
+                        System.out.println(recipeDto.getCode() + "bekbek");
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        System.out.println("onComplete");
+                    }
+                });
     }
 
     public void createSingletonUserWithPreferences(){
