@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.begers.tariflerim.model.Likes;
 import com.begers.tariflerim.service.local.abstracts.LikesDao;
 
-@Database(entities = {Likes.class}, version = 1)
+@Database(entities = {Likes.class}, version = 1, exportSchema = false)
 public abstract class LikesDatabase extends RoomDatabase {
 
     private static LikesDatabase instance;

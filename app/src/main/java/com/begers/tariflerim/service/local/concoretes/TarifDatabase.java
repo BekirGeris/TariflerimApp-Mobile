@@ -11,7 +11,7 @@ import com.begers.tariflerim.model.Tarif;
 import com.begers.tariflerim.service.local.abstracts.TarifDao;
 import com.begers.tariflerim.utiles.Converters;
 
-@Database(entities = {Tarif.class}, version = 1)
+@Database(entities = {Tarif.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class TarifDatabase extends RoomDatabase{
 

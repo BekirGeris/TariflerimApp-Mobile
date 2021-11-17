@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.begers.tariflerim.model.Image;
 import com.begers.tariflerim.service.local.abstracts.ImageDao;
 
-@Database(entities = {Image.class}, version = 1)
+@Database(entities = {Image.class}, version = 1, exportSchema = false)
 public abstract class ImageDatabase extends RoomDatabase {
 
     private static ImageDatabase instance;

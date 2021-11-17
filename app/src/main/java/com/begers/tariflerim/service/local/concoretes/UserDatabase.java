@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.begers.tariflerim.model.User;
 import com.begers.tariflerim.service.local.abstracts.UserDao;
 
-@Database(entities = {User.class}, version = 1)
+@Database(entities = {User.class}, version = 1, exportSchema = false)
 public abstract class UserDatabase extends RoomDatabase {
 
     private static UserDatabase instance;
