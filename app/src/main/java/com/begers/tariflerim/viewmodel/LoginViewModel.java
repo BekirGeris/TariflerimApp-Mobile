@@ -7,29 +7,31 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.begers.tariflerim.model.Tarif;
-import com.begers.tariflerim.model.User;
+import com.begers.tariflerim.model.api.TarifR;
+import com.begers.tariflerim.model.roomdb.User;
 import com.begers.tariflerim.model.dtos.RecipeDto;
 import com.begers.tariflerim.service.http.concoretes.RecipeService;
 import com.begers.tariflerim.service.local.abstracts.UserDao;
 import com.begers.tariflerim.service.local.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
 
+import org.reactivestreams.Subscription;
+
+import java.util.Arrays;
 import java.util.List;
 
+import io.reactivex.CompletableObserver;
+import io.reactivex.FlowableSubscriber;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
-import io.reactivex.functions.Consumer;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Action;
-import io.reactivex.rxjava3.observers.DisposableSingleObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class LoginViewModel extends BaseViewModel {
 
-    private RecipeService recipeService = new RecipeService();
+
 
     private SharedPreferences preferences;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -46,30 +48,7 @@ public class LoginViewModel extends BaseViewModel {
         db = UserDatabase.getInstance(getApplication());
         userDao = db.userDao();
 
-    recipeService.getAll()
-                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
-                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(new Observer<RecipeDto>() {
-                    @Override
-                    public void onSubscribe(@io.reactivex.annotations.NonNull io.reactivex.disposables.Disposable d) {
-                        System.out.println("onSubscribe");
-                    }
 
-                    @Override
-                    public void onNext(@io.reactivex.annotations.NonNull RecipeDto recipeDto) {
-                        System.out.println(recipeDto.getCode() + "bekbek");
-                    }
-
-                    @Override
-                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        System.out.println("onComplete");
-                    }
-                });
     }
 
     public void createSingletonUserWithPreferences(){

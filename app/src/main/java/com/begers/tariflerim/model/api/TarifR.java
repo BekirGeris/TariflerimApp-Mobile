@@ -1,55 +1,34 @@
-package com.begers.tariflerim.model;
+package com.begers.tariflerim.model.api;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.Date;
 
-@Entity(tableName = "Tarifler")
-public class Tarif {
+public class TarifR {
 
     @SerializedName("id")
-    @PrimaryKey(autoGenerate = true)
     private int id;
 
     @SerializedName("userId")
-    @ColumnInfo(name = "userId")
     private int userId;
 
     @SerializedName("name")
-    @ColumnInfo(name = "name")
     private String name;
 
     @SerializedName("tarif")
-    @ColumnInfo(name = "tarif")
     private String tarif;
 
     @SerializedName("date")
-    @ColumnInfo(name = "date")
-    private Date date;
+    public String date;
 
     @SerializedName("image")
-    @ColumnInfo(name = "image")
-    private byte[] image;
+    private String image;
 
-    public Tarif(String name,int userId, String tarif, byte[] image) {
+    public TarifR(String name,int userId, String date, String tarif, String image) {
         this.name = name;
         this.userId = userId;
+        this.date = date;
         this.tarif = tarif;
         this.image = image;
-        this.date = new Date();
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     public int getId() {
@@ -76,7 +55,7 @@ public class Tarif {
         this.name = name;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
@@ -88,7 +67,7 @@ public class Tarif {
         this.tarif = tarif;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 }

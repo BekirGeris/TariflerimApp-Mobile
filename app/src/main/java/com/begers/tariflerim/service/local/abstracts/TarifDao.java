@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.begers.tariflerim.model.Tarif;
+import com.begers.tariflerim.model.roomdb.Tarif;
 
 import java.util.List;
 

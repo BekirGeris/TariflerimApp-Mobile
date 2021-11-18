@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.begers.tariflerim.databinding.RecyclerRowBinding;
-import com.begers.tariflerim.model.Image;
-import com.begers.tariflerim.model.Tarif;
-import com.begers.tariflerim.model.User;
+import com.begers.tariflerim.model.roomdb.Image;
+import com.begers.tariflerim.model.roomdb.Tarif;
+import com.begers.tariflerim.model.roomdb.User;
 import com.begers.tariflerim.service.local.abstracts.ImageDao;
 import com.begers.tariflerim.service.local.abstracts.UserDao;
 import com.begers.tariflerim.service.local.concoretes.ImageDatabase;

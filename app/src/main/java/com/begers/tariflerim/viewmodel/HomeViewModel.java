@@ -4,7 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.begers.tariflerim.model.Tarif;
+import com.begers.tariflerim.model.roomdb.Tarif;
 import com.begers.tariflerim.service.local.abstracts.TarifDao;
 import com.begers.tariflerim.service.local.concoretes.TarifDatabase;
 import com.begers.tariflerim.utiles.TarifComparator;

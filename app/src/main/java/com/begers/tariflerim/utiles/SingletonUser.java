@@ -1,6 +1,6 @@
 package com.begers.tariflerim.utiles;
 
-import com.begers.tariflerim.model.User;
+import com.begers.tariflerim.model.roomdb.User;
 
 public class SingletonUser {
 

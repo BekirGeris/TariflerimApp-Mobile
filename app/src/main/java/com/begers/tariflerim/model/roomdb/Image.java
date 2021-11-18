@@ -1,11 +1,11 @@
-package com.begers.tariflerim.model;
+package com.begers.tariflerim.model.roomdb;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Likes {
+public class Image {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -13,8 +13,13 @@ public class Likes {
     @ColumnInfo(name = "userId")
     private int userId;
 
-    @ColumnInfo(name = "tarifId")
-    private int tarifId;
+    @ColumnInfo(name = "profileImage")
+    private byte[] profileImage;
+
+    public Image(int userId, byte[] profileImage) {
+        this.userId = userId;
+        this.profileImage = profileImage;
+    }
 
     public int getId() {
         return id;
@@ -32,11 +37,11 @@ public class Likes {
         this.userId = userId;
     }
 
-    public int getTarifId() {
-        return tarifId;
+    public byte[] getProfileImage() {
+        return profileImage;
     }
 
-    public void setTarifId(int tarifId) {
-        this.tarifId = tarifId;
+    public void setProfileImage(byte[] profileImage) {
+        this.profileImage = profileImage;
     }
 }

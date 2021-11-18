@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "992383877333",
+    "project_id": "tariflerimapp",
+    "storage_bucket": "tariflerimapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:992383877333:android:a4d0a2b49319d61391225c",
+        "android_client_info": {
+          "package_name": "com.begers.tariflerim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "992383877333-92smmkiunji8psoiml93m9rphgc6nvkq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoFzOhfYys8-3qHTtQVhU5g829ulb7pes"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "992383877333-92smmkiunji8psoiml93m9rphgc6nvkq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

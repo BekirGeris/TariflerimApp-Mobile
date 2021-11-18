@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.begers.tariflerim.model.Likes;
+import com.begers.tariflerim.model.roomdb.Likes;
 
 import java.util.List;
 

@@ -5,6 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
+        classpath 'com.google.gms:google-services:4.3.10'
         classpath 'com.android.tools.build:gradle:7.0.3'
         def nav_version = "2.3.5"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"

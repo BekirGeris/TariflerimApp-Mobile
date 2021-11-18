@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.begers.tariflerim.model.Likes;
+import com.begers.tariflerim.model.roomdb.Likes;
 import com.begers.tariflerim.service.local.abstracts.LikesDao;
 
 @Database(entities = {Likes.class}, version = 1, exportSchema = false)

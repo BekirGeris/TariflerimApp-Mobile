@@ -5,7 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.begers.tariflerim.model.User;
+import com.begers.tariflerim.model.roomdb.User;
 
 import java.util.List;
 

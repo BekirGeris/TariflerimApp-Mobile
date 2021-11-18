@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.begers.tariflerim.model.Image;
-import com.begers.tariflerim.model.Tarif;
-import com.begers.tariflerim.model.User;
+import com.begers.tariflerim.model.roomdb.Image;
+import com.begers.tariflerim.model.roomdb.Tarif;
+import com.begers.tariflerim.model.roomdb.User;
 import com.begers.tariflerim.service.local.abstracts.ImageDao;
 import com.begers.tariflerim.service.local.abstracts.TarifDao;
 import com.begers.tariflerim.service.local.abstracts.UserDao;

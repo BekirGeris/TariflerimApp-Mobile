@@ -1,4 +1,4 @@
-package com.begers.tariflerim.model;
+package com.begers.tariflerim.model.roomdb;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

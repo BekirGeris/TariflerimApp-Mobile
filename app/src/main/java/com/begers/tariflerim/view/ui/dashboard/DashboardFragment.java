@@ -26,13 +26,23 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.begers.tariflerim.databinding.FragmentDashboardBinding;
-import com.begers.tariflerim.model.Tarif;
-import com.begers.tariflerim.model.User;
+import com.begers.tariflerim.model.api.TarifR;
+import com.begers.tariflerim.model.roomdb.Tarif;
+import com.begers.tariflerim.model.roomdb.User;
 import com.begers.tariflerim.utiles.SingletonUser;
 import com.begers.tariflerim.viewmodel.DashboardViewModel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Date;
+import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -49,6 +59,12 @@ public class DashboardFragment extends Fragment {
     private SingletonUser singletonUser;
     private User user;
 
+    private Uri imageData;
+    private FirebaseAuth auth;
+    private FirebaseStorage firebaseStorage;
+    private StorageReference storageReference;
+    private FirebaseFirestore firebaseFirestore;
+
     public DashboardFragment() {
 
     }
@@ -59,6 +75,11 @@ public class DashboardFragment extends Fragment {
 
         singletonUser = SingletonUser.getInstance();
         user = singletonUser.getSentUser();
+
+        auth = FirebaseAuth.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        storageReference = firebaseStorage.getReference();
 
         registerLauncher();
     }
@@ -92,10 +113,12 @@ public class DashboardFragment extends Fragment {
     public void save(View view){
         String tarifName = binding.textName.getText().toString();
         String tarifDec = binding.textDescription.getText().toString();
+        System.out.println(imageData);
 
-        if (tarifName.equals("") || tarifDec.equals("") || selectedImage == null){
+        if (tarifName.equals("") || tarifDec.equals("") || selectedImage == null || imageData == null){
             Toast.makeText(getActivity(), "Bilgileri Boş Bırakmayınız", Toast.LENGTH_LONG).show();
         }else {
+            /* Room db
             Bitmap smallImage = makeSmallerImage(selectedImage,300);
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -105,7 +128,32 @@ public class DashboardFragment extends Fragment {
             Tarif tarif = new Tarif(tarifName, user.getId(), tarifDec, bytes);
 
             viewModel.insertTarif(tarif, view);
+             */
 
+            //Firebase and psql
+            UUID uuid = UUID.randomUUID();
+            String imageName = "images/" + uuid + ".jpg";
+            storageReference.child(imageName).putFile(imageData)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            /*
+                            StorageReference newReference = firebaseStorage.getReference(imageName);
+                            newReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    viewModel.addTarif(new TarifR(tarifName, user.getId(),new Date().toString(), tarifDec, uri.toString()), view);
+                                }
+                            });*/
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
         }
     }
 
@@ -138,7 +186,7 @@ public class DashboardFragment extends Fragment {
                 if (result.getResultCode() == RESULT_OK){
                     Intent intentFromResult = result.getData();
                     if (intentFromResult != null){
-                        Uri imageData = intentFromResult.getData(); //kullanıcının seçtiği resmin kaynağını verir.
+                        imageData = intentFromResult.getData(); //kullanıcının seçtiği resmin kaynağını verir.
                         binding.setScr.setImageURI(imageData);
 
                         try{

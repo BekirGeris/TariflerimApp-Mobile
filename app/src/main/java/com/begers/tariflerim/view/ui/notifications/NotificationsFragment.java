@@ -29,8 +29,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.begers.tariflerim.adapter.TarifGritAdapter;
 import com.begers.tariflerim.databinding.FragmentNotificationsBinding;
-import com.begers.tariflerim.model.Image;
-import com.begers.tariflerim.model.User;
+import com.begers.tariflerim.model.roomdb.Image;
+import com.begers.tariflerim.model.roomdb.User;
 import com.begers.tariflerim.utiles.SingletonUser;
 import com.begers.tariflerim.viewmodel.NotificationsViewModel;
 import com.google.android.material.snackbar.Snackbar;

@@ -7,7 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.begers.tariflerim.model.Tarif;
+import com.begers.tariflerim.model.roomdb.Tarif;
 import com.begers.tariflerim.service.local.abstracts.TarifDao;
 import com.begers.tariflerim.utiles.Converters;
 

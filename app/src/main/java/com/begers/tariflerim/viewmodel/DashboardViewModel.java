@@ -5,19 +5,26 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.begers.tariflerim.model.Tarif;
+import com.begers.tariflerim.model.api.TarifR;
+import com.begers.tariflerim.model.dtos.RecipeDto;
+import com.begers.tariflerim.model.roomdb.Tarif;
 import com.begers.tariflerim.service.http.concoretes.RecipeService;
 import com.begers.tariflerim.service.local.abstracts.TarifDao;
 import com.begers.tariflerim.service.local.concoretes.TarifDatabase;
 import com.begers.tariflerim.view.ui.dashboard.DashboardFragmentDirections;
 
+import java.util.List;
+
+import io.reactivex.CompletableObserver;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.functions.Action;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class DashboardViewModel extends BaseViewModel {
@@ -25,6 +32,8 @@ public class DashboardViewModel extends BaseViewModel {
     private RecipeService recipeService = new RecipeService();
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    private MutableLiveData<List<TarifR>> tarifs = new MutableLiveData<>();
 
     private TarifDatabase db;
     private TarifDao tarifDao;
@@ -51,6 +60,58 @@ public class DashboardViewModel extends BaseViewModel {
                     }
                 })
         );
+    }
+
+    public void getAllTarifFromAPI(){
+        recipeService.getAll()
+                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(new Observer<RecipeDto>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.annotations.NonNull io.reactivex.disposables.Disposable d) {
+                        System.out.println("onSubscribe");
+                    }
+
+                    @Override
+                    public void onNext(@io.reactivex.annotations.NonNull RecipeDto recipeDto) {
+                        tarifs.setValue(recipeDto.getData());
+                        System.out.println("onNext");
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        System.out.println("onComplete");
+                    }
+                });
+    }
+
+    public void addTarif(TarifR tarifR, View view){
+        recipeService.add(tarifR)
+                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        System.out.println("add");
+                        NavDirections action = DashboardFragmentDirections.actionNavigationDashboardToNavigationHome();
+                        Navigation.findNavController(view).navigate(action);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     @Override

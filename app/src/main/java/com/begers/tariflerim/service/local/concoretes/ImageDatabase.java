@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.begers.tariflerim.model.Image;
+import com.begers.tariflerim.model.roomdb.Image;
 import com.begers.tariflerim.service.local.abstracts.ImageDao;
 
 @Database(entities = {Image.class}, version = 1, exportSchema = false)
