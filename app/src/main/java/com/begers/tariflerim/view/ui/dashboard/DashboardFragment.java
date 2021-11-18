@@ -138,14 +138,13 @@ public class DashboardFragment extends Fragment {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                            /*
                             StorageReference newReference = firebaseStorage.getReference(imageName);
                             newReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     viewModel.addTarif(new TarifR(tarifName, user.getId(),new Date().toString(), tarifDec, uri.toString()), view);
                                 }
-                            });*/
+                            });
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
