@@ -14,6 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.begers.tariflerim.adapter.TarifAdapter;
 import com.begers.tariflerim.databinding.FragmentHomeBinding;
 import com.begers.tariflerim.viewmodel.HomeViewModel;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class HomeFragment extends Fragment {
 
@@ -40,17 +43,20 @@ public class HomeFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         viewModel.refreshData();
+        viewModel.getAllTarifFromAPI();
 
         observerLiveData();
     }
 
     private void observerLiveData() {
+        /*
         viewModel.getTarifs().observe(getViewLifecycleOwner(), tarifs -> {
             if (tarifs != null){
                 adapter = new TarifAdapter(tarifs, getContext());
                 binding.recyclerView.setAdapter(adapter);
             }
         });
+         */
 
         viewModel.getError().observe(getViewLifecycleOwner(), error -> {
 
@@ -58,6 +64,13 @@ public class HomeFragment extends Fragment {
 
         viewModel.getLoading().observe(getViewLifecycleOwner(), loading -> {
 
+        });
+
+        viewModel.getTarifRs().observe(getViewLifecycleOwner(), tarifRs -> {
+            if (tarifRs != null){
+                adapter = new TarifAdapter(tarifRs, getContext());
+                binding.recyclerView.setAdapter(adapter);
+            }
         });
     }
 

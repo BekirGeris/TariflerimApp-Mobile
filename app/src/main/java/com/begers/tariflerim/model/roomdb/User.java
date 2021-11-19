@@ -4,21 +4,28 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 @Entity
 public class User {
 
+    @SerializedName("userId")
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    @SerializedName("firstName")
     @ColumnInfo(name = "firstName")
     private String firstName;
 
+    @SerializedName("lastName")
     @ColumnInfo(name = "lastName")
     private String lastName;
 
+    @SerializedName("email")
     @ColumnInfo(name = "email")
     private String email;
 
+    @SerializedName("password")
     @ColumnInfo(name = "password")
     private String password;
 

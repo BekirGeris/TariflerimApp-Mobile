@@ -20,7 +20,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private FirebaseAuth auth;
     private LoginViewModel viewModel;
     private ActivityLoginBinding binding;
     @Override
@@ -28,29 +27,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();
-        if (user == null) {
-            auth.createUserWithEmailAndPassword("bekir.geris@gmail.com", "123456").addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                @Override
-                public void onSuccess(AuthResult authResult) {
-                    System.out.println("create");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    System.out.println(e.getLocalizedMessage());
-                }
-            });
-        }else {
-            auth.signInWithEmailAndPassword("bekir.geris@gmail.com", "123456").addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                @Override
-                public void onSuccess(AuthResult authResult) {
-                    System.out.println("sign in");
-                }
-            });
-        }
 
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         viewModel.createSingletonUserWithPreferences();

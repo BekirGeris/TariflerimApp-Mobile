@@ -33,8 +33,6 @@ public class DashboardViewModel extends BaseViewModel {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    private MutableLiveData<List<TarifR>> tarifs = new MutableLiveData<>();
-
     private TarifDatabase db;
     private TarifDao tarifDao;
 
@@ -60,34 +58,6 @@ public class DashboardViewModel extends BaseViewModel {
                     }
                 })
         );
-    }
-
-    public void getAllTarifFromAPI(){
-        recipeService.getAll()
-                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
-                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(new Observer<RecipeDto>() {
-                    @Override
-                    public void onSubscribe(@io.reactivex.annotations.NonNull io.reactivex.disposables.Disposable d) {
-                        System.out.println("onSubscribe");
-                    }
-
-                    @Override
-                    public void onNext(@io.reactivex.annotations.NonNull RecipeDto recipeDto) {
-                        tarifs.setValue(recipeDto.getData());
-                        System.out.println("onNext");
-                    }
-
-                    @Override
-                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        System.out.println("onComplete");
-                    }
-                });
     }
 
     public void addTarif(TarifR tarifR, View view){

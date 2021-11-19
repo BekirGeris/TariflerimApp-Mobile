@@ -27,20 +27,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.begers.tariflerim.databinding.FragmentDashboardBinding;
 import com.begers.tariflerim.model.api.TarifR;
-import com.begers.tariflerim.model.roomdb.Tarif;
 import com.begers.tariflerim.model.roomdb.User;
 import com.begers.tariflerim.utiles.SingletonUser;
 import com.begers.tariflerim.viewmodel.DashboardViewModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Date;
 import java.util.UUID;
 
@@ -60,7 +57,6 @@ public class DashboardFragment extends Fragment {
     private User user;
 
     private Uri imageData;
-    private FirebaseAuth auth;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
     private FirebaseFirestore firebaseFirestore;
@@ -76,7 +72,6 @@ public class DashboardFragment extends Fragment {
         singletonUser = SingletonUser.getInstance();
         user = singletonUser.getSentUser();
 
-        auth = FirebaseAuth.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         storageReference = firebaseStorage.getReference();
@@ -129,7 +124,8 @@ public class DashboardFragment extends Fragment {
 
             viewModel.insertTarif(tarif, view);
              */
-
+            binding.save.setEnabled(false);
+            binding.proBar.setVisibility(View.VISIBLE);
             //Firebase and psql
             UUID uuid = UUID.randomUUID();
             String imageName = "images/" + uuid + ".jpg";

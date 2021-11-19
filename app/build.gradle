@@ -83,4 +83,6 @@ dependencies {
 
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rxJavaVersion"
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }

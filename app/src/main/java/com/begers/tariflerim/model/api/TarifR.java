@@ -18,7 +18,7 @@ public class TarifR {
     private String tarif;
 
     @SerializedName("date")
-    public String date;
+    private String date;
 
     @SerializedName("image")
     private String image;
@@ -69,5 +69,13 @@ public class TarifR {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

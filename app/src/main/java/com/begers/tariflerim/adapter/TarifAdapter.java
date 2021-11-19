@@ -11,15 +11,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.begers.tariflerim.databinding.RecyclerRowBinding;
+import com.begers.tariflerim.model.api.TarifR;
 import com.begers.tariflerim.model.roomdb.Image;
-import com.begers.tariflerim.model.roomdb.Tarif;
 import com.begers.tariflerim.model.roomdb.User;
+import com.begers.tariflerim.service.http.concoretes.RecipeService;
 import com.begers.tariflerim.service.local.abstracts.ImageDao;
 import com.begers.tariflerim.service.local.abstracts.UserDao;
 import com.begers.tariflerim.service.local.concoretes.ImageDatabase;
 import com.begers.tariflerim.service.local.concoretes.UserDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
-import java.util.Date;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -31,7 +35,7 @@ public class TarifAdapter extends RecyclerView.Adapter<TarifAdapter.TarifHolder>
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    List<Tarif> tarifs;
+    List<TarifR> tarifRs;
 
     Context context;
 
@@ -41,8 +45,8 @@ public class TarifAdapter extends RecyclerView.Adapter<TarifAdapter.TarifHolder>
     private ImageDatabase imageDatabase;
     private ImageDao imageDao;
 
-    public TarifAdapter(List<Tarif> tarifs, Context context) {
-        this.tarifs = tarifs;
+    public TarifAdapter(List<TarifR> tarifRs, Context context) {
+        this.tarifRs = tarifRs;
         this.context = context;
 
         userDatabase = Room.databaseBuilder(context, UserDatabase.class, "User").build();
@@ -72,7 +76,7 @@ public class TarifAdapter extends RecyclerView.Adapter<TarifAdapter.TarifHolder>
     @Override
     public void onBindViewHolder(@NonNull TarifHolder holder, int position) {
 
-        compositeDisposable.add(userDao.getUserId(tarifs.get(position).getUserId())
+        compositeDisposable.add(userDao.getUserId(tarifRs.get(position).getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<User>() {
@@ -84,7 +88,7 @@ public class TarifAdapter extends RecyclerView.Adapter<TarifAdapter.TarifHolder>
                            })
                 );
 
-        compositeDisposable.add(imageDao.getImageUserId(tarifs.get(position).getUserId())
+        compositeDisposable.add(imageDao.getImageUserId(tarifRs.get(position).getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Image>() {
@@ -97,15 +101,18 @@ public class TarifAdapter extends RecyclerView.Adapter<TarifAdapter.TarifHolder>
                 })
         );
 
+        /*
         Bitmap bitmap = BitmapFactory.decodeByteArray(tarifs.get(position).getImage(),0,tarifs.get(position).getImage().length);
         holder.binding.recyclerViewImageView.setImageBitmap(bitmap);
-        holder.binding.recyclerViewTitle.setText(tarifs.get(position).getName());
-        holder.binding.recyclerViewDescription.setText(tarifs.get(position).getTarif());
-        holder.binding.postDate.setText(new Date().toString());
+         */
+        Picasso.get().load(tarifRs.get(position).getImage()).into(holder.binding.recyclerViewImageView);
+        holder.binding.recyclerViewTitle.setText(tarifRs.get(position).getName());
+        holder.binding.recyclerViewDescription.setText(tarifRs.get(position).getTarif());
+        holder.binding.postDate.setText(tarifRs.get(position).getDate());
     }
 
     @Override
     public int getItemCount() {
-        return tarifs.size();
+        return tarifRs.size();
     }
 }
