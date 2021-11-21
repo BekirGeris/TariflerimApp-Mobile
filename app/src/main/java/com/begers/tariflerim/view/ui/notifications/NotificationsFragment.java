@@ -29,13 +29,21 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.begers.tariflerim.adapter.TarifGritAdapter;
 import com.begers.tariflerim.databinding.FragmentNotificationsBinding;
-import com.begers.tariflerim.model.roomdb.Image;
+import com.begers.tariflerim.model.api.Image;
+import com.begers.tariflerim.model.roomdb.ImageRoom;
 import com.begers.tariflerim.model.roomdb.User;
 import com.begers.tariflerim.utiles.SingletonUser;
 import com.begers.tariflerim.viewmodel.NotificationsViewModel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -51,9 +59,20 @@ public class NotificationsFragment extends Fragment {
     private ActivityResultLauncher<String> permissionLauncher;  //izin almak için kullanılır.
     private Bitmap selectedImage;
 
+    private Uri imageData;
+    private FirebaseStorage firebaseStorage;
+    private StorageReference storageReference;
+    private FirebaseFirestore firebaseFirestore;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        firebaseStorage = FirebaseStorage.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        storageReference = firebaseStorage.getReference();
+
+        registerLauncher();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,8 +89,6 @@ public class NotificationsFragment extends Fragment {
 
         singletonUser = SingletonUser.getInstance();
         user = singletonUser.getSentUser();
-
-        registerLauncher();
 
         binding.circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,15 +143,42 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void save(){
+        /*
         Bitmap smallImage = makeSmallerImage(selectedImage,300);
 
+        image save roomdb
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         smallImage.compress(Bitmap.CompressFormat.PNG,50,outputStream);
         byte[] bytes = outputStream.toByteArray();
 
-        Image image = new Image(user.getId(), bytes);
+        ImageRoom imageRoom = new ImageRoom(user.getId(), bytes);
+        viewModel.insertImage(imageRoom, binding.getRoot());
+         */
 
-        viewModel.insertImage(image, binding.getRoot());
+        //Firebase and psql
+        UUID uuid = UUID.randomUUID();
+        String imageName = "images/" + uuid + ".jpg";
+        storageReference.child(imageName).putFile(imageData)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        StorageReference newReference = firebaseStorage.getReference(imageName);
+                        newReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                viewModel.insertImage(new Image(user.getId(), uri.toString()));
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
     }
 
     private void registerLauncher(){  //tanımlamalar yapılacak
@@ -145,7 +189,7 @@ public class NotificationsFragment extends Fragment {
                 if (result.getResultCode() == RESULT_OK){
                     Intent intentFromResult = result.getData();
                     if (intentFromResult != null){
-                        Uri imageData = intentFromResult.getData(); //kullanıcının seçtiği resmin kaynağını verir.
+                        imageData = intentFromResult.getData(); //kullanıcının seçtiği resmin kaynağını verir.
                         binding.circleImageView.setImageURI(imageData);
 
                         Toast.makeText(getActivity(), "Seçim Tamamlandı", Toast.LENGTH_LONG).show();

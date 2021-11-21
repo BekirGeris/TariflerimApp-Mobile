@@ -26,7 +26,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.begers.tariflerim.databinding.FragmentDashboardBinding;
-import com.begers.tariflerim.model.api.TarifR;
+import com.begers.tariflerim.model.api.Tarif;
 import com.begers.tariflerim.model.roomdb.User;
 import com.begers.tariflerim.utiles.SingletonUser;
 import com.begers.tariflerim.viewmodel.DashboardViewModel;
@@ -138,7 +138,7 @@ public class DashboardFragment extends Fragment {
                             newReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    viewModel.addTarif(new TarifR(tarifName, user.getId(),new Date().toString(), tarifDec, uri.toString()), view);
+                                    viewModel.addTarif(new Tarif(tarifName, user.getId(),new Date().toString(), tarifDec, uri.toString()), view);
                                 }
                             });
                         }

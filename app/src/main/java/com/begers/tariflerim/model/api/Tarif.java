@@ -3,7 +3,7 @@ package com.begers.tariflerim.model.api;
 import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 
-public class TarifR {
+public class Tarif {
 
     @SerializedName("id")
     private int id;
@@ -23,7 +23,7 @@ public class TarifR {
     @SerializedName("image")
     private String image;
 
-    public TarifR(String name,int userId, String date, String tarif, String image) {
+    public Tarif(String name, int userId, String date, String tarif, String image) {
         this.name = name;
         this.userId = userId;
         this.date = date;

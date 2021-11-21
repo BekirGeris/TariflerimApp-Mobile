@@ -4,9 +4,9 @@ import android.app.Application;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.begers.tariflerim.model.api.TarifR;
+import com.begers.tariflerim.model.api.Tarif;
 import com.begers.tariflerim.model.dtos.RecipeDto;
-import com.begers.tariflerim.model.roomdb.Tarif;
+import com.begers.tariflerim.model.roomdb.TarifRoom;
 import com.begers.tariflerim.service.http.concoretes.RecipeService;
 import com.begers.tariflerim.service.local.abstracts.TarifDao;
 import com.begers.tariflerim.service.local.concoretes.TarifDatabase;
@@ -30,10 +30,10 @@ public class HomeViewModel extends BaseViewModel {
     private TarifDatabase db;
     private TarifDao tarifDao;
 
-    private MutableLiveData<List<Tarif>> tarifs = new MutableLiveData<>();
+    private MutableLiveData<List<TarifRoom>> tarifs = new MutableLiveData<>();
     private MutableLiveData<Boolean> error = new MutableLiveData<>();
     private MutableLiveData<Boolean> loading = new MutableLiveData<>();
-    private MutableLiveData<List<TarifR>> tarifRs = new MutableLiveData<>();
+    private MutableLiveData<List<Tarif>> tarifRs = new MutableLiveData<>();
 
     public HomeViewModel(Application application){
         super(application);
@@ -52,7 +52,7 @@ public class HomeViewModel extends BaseViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(unSortedList -> {
-                    List<Tarif> sortedList = new ArrayList<>(unSortedList);
+                    List<TarifRoom> sortedList = new ArrayList<>(unSortedList);
                     Collections.sort(sortedList, new TarifComparator());
                     return sortedList;
                 })
@@ -92,7 +92,7 @@ public class HomeViewModel extends BaseViewModel {
                 });
     }
 
-    public MutableLiveData<List<Tarif>> getTarifs() {
+    public MutableLiveData<List<TarifRoom>> getTarifs() {
         return tarifs;
     }
 
@@ -104,7 +104,7 @@ public class HomeViewModel extends BaseViewModel {
         return loading;
     }
 
-    public MutableLiveData<List<TarifR>> getTarifRs() {
+    public MutableLiveData<List<Tarif>> getTarifRs() {
         return tarifRs;
     }
 

@@ -1,6 +1,5 @@
 package com.begers.tariflerim.model.dtos;
 
-import com.begers.tariflerim.model.api.TarifR;
 import com.begers.tariflerim.model.roomdb.User;
 import com.google.gson.annotations.SerializedName;
 
@@ -18,7 +17,7 @@ public class UserDto {
     private int code;
 
     @SerializedName("data")
-    private List<User> data;
+    private User data;
 
     public String getMessage() {
         return message;
@@ -44,11 +43,11 @@ public class UserDto {
         this.code = code;
     }
 
-    public List<User> getData() {
+    public User getData() {
         return data;
     }
 
-    public void setData(List<User> data) {
+    public void setData(User data) {
         this.data = data;
     }
 }

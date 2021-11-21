@@ -10,7 +10,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavDirections;
@@ -18,12 +17,8 @@ import androidx.navigation.Navigation;
 
 import com.begers.tariflerim.R;
 import com.begers.tariflerim.databinding.FragmentLoginBinding;
-import com.begers.tariflerim.model.api.TarifR;
 import com.begers.tariflerim.view.MainActivity;
 import com.begers.tariflerim.viewmodel.LoginViewModel;
-
-import java.util.List;
-import java.util.function.Consumer;
 
 
 public class LogInFragment extends Fragment {

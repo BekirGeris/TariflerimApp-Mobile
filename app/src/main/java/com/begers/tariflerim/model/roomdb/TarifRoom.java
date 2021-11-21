@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 
 @Entity(tableName = "Tarifler")
-public class Tarif {
+public class TarifRoom {
 
     @SerializedName("id")
     @PrimaryKey(autoGenerate = true)
@@ -36,7 +36,7 @@ public class Tarif {
     @ColumnInfo(name = "image")
     private byte[] image;
 
-    public Tarif(String name,int userId, String tarif, byte[] image) {
+    public TarifRoom(String name, int userId, String tarif, byte[] image) {
         this.name = name;
         this.userId = userId;
         this.tarif = tarif;

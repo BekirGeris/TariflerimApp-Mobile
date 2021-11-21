@@ -5,22 +5,17 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.begers.tariflerim.model.api.TarifR;
-import com.begers.tariflerim.model.dtos.RecipeDto;
-import com.begers.tariflerim.model.roomdb.Tarif;
+import com.begers.tariflerim.model.api.Tarif;
+import com.begers.tariflerim.model.roomdb.TarifRoom;
 import com.begers.tariflerim.service.http.concoretes.RecipeService;
 import com.begers.tariflerim.service.local.abstracts.TarifDao;
 import com.begers.tariflerim.service.local.concoretes.TarifDatabase;
 import com.begers.tariflerim.view.ui.dashboard.DashboardFragmentDirections;
 
-import java.util.List;
-
 import io.reactivex.CompletableObserver;
-import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -45,8 +40,8 @@ public class DashboardViewModel extends BaseViewModel {
 
     }
 
-    public void insertTarif(Tarif tarif, View view){
-        compositeDisposable.add(tarifDao.insert(tarif)
+    public void insertTarif(TarifRoom tarifRoom, View view){
+        compositeDisposable.add(tarifDao.insert(tarifRoom)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action() {
@@ -60,8 +55,8 @@ public class DashboardViewModel extends BaseViewModel {
         );
     }
 
-    public void addTarif(TarifR tarifR, View view){
-        recipeService.add(tarifR)
+    public void addTarif(Tarif tarif, View view){
+        recipeService.add(tarif)
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
                 .subscribe(new CompletableObserver() {

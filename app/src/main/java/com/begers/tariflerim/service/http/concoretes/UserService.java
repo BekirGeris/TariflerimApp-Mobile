@@ -1,7 +1,7 @@
 package com.begers.tariflerim.service.http.concoretes;
 
+import com.begers.tariflerim.model.dtos.UserListDto;
 import com.begers.tariflerim.model.dtos.UserDto;
-import com.begers.tariflerim.model.dtos.UserDto2;
 import com.begers.tariflerim.model.roomdb.User;
 import com.begers.tariflerim.service.http.abstracts.UserAPI;
 import com.google.gson.Gson;
@@ -25,15 +25,15 @@ public class UserService {
             .build()
             .create(UserAPI.class);
 
-    public Observable<UserDto> getAll(){
+    public Observable<UserListDto> getAll(){
         return api.getAll();
     }
 
-    public Observable<UserDto2> getUserWithUserId(int userId){
+    public Observable<UserDto> getUserWithUserId(int userId){
         return api.getUserWithUserId(userId);
     }
 
-    public Observable<UserDto2> getUserWithEmailAndPassword(String email, String password){
+    public Observable<UserDto> getUserWithEmailAndPassword(String email, String password){
         return api.getUserWithEmailAndPassword(email, password);
     }
 

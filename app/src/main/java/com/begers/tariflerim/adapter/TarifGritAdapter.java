@@ -9,16 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.begers.tariflerim.databinding.RecyclerGritBinding;
-import com.begers.tariflerim.model.roomdb.Tarif;
+import com.begers.tariflerim.model.roomdb.TarifRoom;
 
 import java.util.List;
 
 public class TarifGritAdapter extends RecyclerView.Adapter<TarifGritAdapter.TarifGritHolder> {
 
-    List<Tarif> tarifs;
+    List<TarifRoom> tarifRooms;
 
-    public TarifGritAdapter(List<Tarif> tarifs) {
-        this.tarifs = tarifs;
+    public TarifGritAdapter(List<TarifRoom> tarifRooms) {
+        this.tarifRooms = tarifRooms;
     }
 
     class TarifGritHolder extends RecyclerView.ViewHolder{
@@ -40,13 +40,13 @@ public class TarifGritAdapter extends RecyclerView.Adapter<TarifGritAdapter.Tari
 
     @Override
     public void onBindViewHolder(@NonNull TarifGritHolder holder, int position) {
-        Bitmap bitmap = BitmapFactory.decodeByteArray(tarifs.get(position).getImage(),0,tarifs.get(position).getImage().length);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(tarifRooms.get(position).getImage(),0, tarifRooms.get(position).getImage().length);
         holder.binding.imageViewGrit.setImageBitmap(bitmap);
     }
 
     @Override
     public int getItemCount() {
-        return tarifs.size();
+        return tarifRooms.size();
     }
 
 

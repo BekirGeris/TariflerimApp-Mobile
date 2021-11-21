@@ -1,13 +1,12 @@
 package com.begers.tariflerim.service.http.concoretes;
 
-import com.begers.tariflerim.model.api.TarifR;
+import com.begers.tariflerim.model.api.Tarif;
 import com.begers.tariflerim.model.dtos.RecipeDto;
 import com.begers.tariflerim.service.http.abstracts.RecipeAPI;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -29,8 +28,8 @@ public class RecipeService {
         return api.getAll();
     }
 
-    public Completable add(TarifR tarifR){
-        return api.add(tarifR);
+    public Completable add(Tarif tarif){
+        return api.add(tarif);
     }
 }
 

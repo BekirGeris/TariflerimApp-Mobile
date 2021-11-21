@@ -1,7 +1,6 @@
 package com.begers.tariflerim.model.dtos;
 
-import com.begers.tariflerim.model.api.TarifR;
-import com.begers.tariflerim.model.roomdb.Tarif;
+import com.begers.tariflerim.model.api.Tarif;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -18,9 +17,9 @@ public class RecipeDto {
     private int code;
 
     @SerializedName("data")
-    private List<TarifR> data;
+    private List<Tarif> data;
 
-    public RecipeDto(String message, boolean success, int code, List<TarifR> data) {
+    public RecipeDto(String message, boolean success, int code, List<Tarif> data) {
         this.message = message;
         this.success = success;
         this.code = code;
@@ -51,11 +50,11 @@ public class RecipeDto {
         this.code = code;
     }
 
-    public List<TarifR> getData() {
+    public List<Tarif> getData() {
         return data;
     }
 
-    public void setData(List<TarifR> data) {
+    public void setData(List<Tarif> data) {
         this.data = data;
     }
 }

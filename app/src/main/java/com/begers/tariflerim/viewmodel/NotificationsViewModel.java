@@ -7,9 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.begers.tariflerim.model.roomdb.Image;
-import com.begers.tariflerim.model.roomdb.Tarif;
+import com.begers.tariflerim.model.api.Image;
+import com.begers.tariflerim.model.roomdb.ImageRoom;
+import com.begers.tariflerim.model.roomdb.TarifRoom;
 import com.begers.tariflerim.model.roomdb.User;
+import com.begers.tariflerim.service.http.concoretes.ImageService;
 import com.begers.tariflerim.service.local.abstracts.ImageDao;
 import com.begers.tariflerim.service.local.abstracts.TarifDao;
 import com.begers.tariflerim.service.local.abstracts.UserDao;
@@ -19,14 +21,18 @@ import com.begers.tariflerim.service.local.concoretes.UserDatabase;
 
 import java.util.List;
 
+import io.reactivex.CompletableObserver;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class NotificationsViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<Tarif>> tarifs = new MutableLiveData<>();
-    private MutableLiveData<Image> image = new MutableLiveData<>();
+    private ImageService imageService = new ImageService();
+
+    private MutableLiveData<List<TarifRoom>> tarifs = new MutableLiveData<>();
+    private MutableLiveData<ImageRoom> image = new MutableLiveData<>();
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -71,21 +77,43 @@ public class NotificationsViewModel extends AndroidViewModel {
         );
     }
 
-    public void insertImage(Image image, View view){
+    public void insertImage(Image image){
 
-        compositeDisposable.add(imageDao.insert(image)
+        /*
+        compositeDisposable.add(imageDao.insert(imageRoom)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
         );
+         */
+
+        imageService.add(image)
+                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
 
     }
 
-    public MutableLiveData<List<Tarif>> getTarifs() {
+    public MutableLiveData<List<TarifRoom>> getTarifs() {
         return tarifs;
     }
 
-    public MutableLiveData<Image> getImage() {
+    public MutableLiveData<ImageRoom> getImage() {
         return image;
     }
 }

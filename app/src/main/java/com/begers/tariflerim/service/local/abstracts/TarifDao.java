@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.begers.tariflerim.model.roomdb.Tarif;
+import com.begers.tariflerim.model.roomdb.TarifRoom;
 
 import java.util.List;
 
@@ -17,17 +17,17 @@ import io.reactivex.rxjava3.core.Flowable;
 public interface TarifDao {
 
     @Query("SELECT * FROM Tarifler")
-    Flowable<List<Tarif>> getAll();
+    Flowable<List<TarifRoom>> getAll();
 
     @Query("SELECT * FROM Tarifler WHERE Tarifler.userId = :userId")
-    Flowable<List<Tarif>> getTarifsUserId(int userId);
+    Flowable<List<TarifRoom>> getTarifsUserId(int userId);
 
     @Insert
-    Completable insert(Tarif tarif);
+    Completable insert(TarifRoom tarifRoom);
 
     @Update
-    Completable update(Tarif tarif);
+    Completable update(TarifRoom tarifRoom);
 
     @Delete
-    Completable delete(Tarif tarif);
+    Completable delete(TarifRoom tarifRoom);
 }

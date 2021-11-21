@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Image {
+public class ImageRoom {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -16,7 +16,7 @@ public class Image {
     @ColumnInfo(name = "profileImage")
     private byte[] profileImage;
 
-    public Image(int userId, byte[] profileImage) {
+    public ImageRoom(int userId, byte[] profileImage) {
         this.userId = userId;
         this.profileImage = profileImage;
     }

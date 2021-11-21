@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class UserDto2 {
+public class UserListDto {
 
     @SerializedName("message")
     private String message;
@@ -17,7 +17,7 @@ public class UserDto2 {
     private int code;
 
     @SerializedName("data")
-    private User data;
+    private List<User> data;
 
     public String getMessage() {
         return message;
@@ -43,11 +43,11 @@ public class UserDto2 {
         this.code = code;
     }
 
-    public User getData() {
+    public List<User> getData() {
         return data;
     }
 
-    public void setData(User data) {
+    public void setData(List<User> data) {
         this.data = data;
     }
 }
