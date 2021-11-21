@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.begers.tariflerim.adapter.TarifGritAdapter;
 import com.begers.tariflerim.databinding.FragmentNotificationsBinding;
 import com.begers.tariflerim.model.api.Image;
-import com.begers.tariflerim.model.roomdb.ImageRoom;
 import com.begers.tariflerim.model.roomdb.User;
 import com.begers.tariflerim.utiles.SingletonUser;
 import com.begers.tariflerim.viewmodel.NotificationsViewModel;
@@ -41,8 +40,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
@@ -113,11 +112,16 @@ public class NotificationsFragment extends Fragment {
             binding.recyclerViewGrit.setAdapter(tarifGritAdapter);
         });
 
-        viewModel.getImage().observe(getViewLifecycleOwner(), image -> {
+        /*
+        viewModel.getImageRoom().observe(getViewLifecycleOwner(), image -> {
             if (image != null) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(image.getProfileImage(), 0, image.getProfileImage().length);
                 binding.circleImageView.setImageBitmap(bitmap);
             }
+        });*/
+
+        viewModel.getImage().observe(getViewLifecycleOwner(), image -> {
+            Picasso.get().load(image.getImageURL()).into(binding.circleImageView);
         });
     }
 
@@ -167,7 +171,7 @@ public class NotificationsFragment extends Fragment {
                         newReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-                                viewModel.insertImage(new Image(user.getId(), uri.toString()));
+                                viewModel.insertImage( new Image(user.getId(), uri.toString()));
                             }
                         });
                     }

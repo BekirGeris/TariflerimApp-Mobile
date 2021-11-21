@@ -1,13 +1,13 @@
 package com.begers.tariflerim.viewmodel;
 
 import android.app.Application;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.begers.tariflerim.model.api.Image;
+import com.begers.tariflerim.model.dtos.ImageDto;
 import com.begers.tariflerim.model.roomdb.ImageRoom;
 import com.begers.tariflerim.model.roomdb.TarifRoom;
 import com.begers.tariflerim.model.roomdb.User;
@@ -22,6 +22,7 @@ import com.begers.tariflerim.service.local.concoretes.UserDatabase;
 import java.util.List;
 
 import io.reactivex.CompletableObserver;
+import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -32,7 +33,8 @@ public class NotificationsViewModel extends AndroidViewModel {
     private ImageService imageService = new ImageService();
 
     private MutableLiveData<List<TarifRoom>> tarifs = new MutableLiveData<>();
-    private MutableLiveData<ImageRoom> image = new MutableLiveData<>();
+    private MutableLiveData<ImageRoom> imageRoom = new MutableLiveData<>();
+    private MutableLiveData<Image> image = new MutableLiveData<>();
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -58,13 +60,40 @@ public class NotificationsViewModel extends AndroidViewModel {
     }
 
     public void getByImage(User user){
+        /*
         compositeDisposable.add(imageDao.getImageUserId(user.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(i -> {
-                    image.setValue(i);
+                    imageRoom.setValue(i);
                 })
-        );
+        );*/
+
+        imageService.getImageWithUserId(user.getId())
+                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ImageDto>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        System.out.println("getImageWithUserId onSubscribe");
+                    }
+
+                    @Override
+                    public void onNext(ImageDto imageDto) {
+                        image.setValue(imageDto.getData());
+                        System.out.println("getImageWithUserId onNext");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("getImageWithUserId onError");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        System.out.println("getImageWithUserId onComplete");
+                    }
+                });
     }
 
     public void getByTarifs(User user){
@@ -93,17 +122,17 @@ public class NotificationsViewModel extends AndroidViewModel {
                 .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        System.out.println("image add onSubscribe");
                     }
 
                     @Override
                     public void onComplete() {
-
+                        System.out.println("image add onComplete");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        System.out.println("image add onError");
                     }
                 });
 
@@ -113,7 +142,11 @@ public class NotificationsViewModel extends AndroidViewModel {
         return tarifs;
     }
 
-    public MutableLiveData<ImageRoom> getImage() {
+    public MutableLiveData<ImageRoom> getImageRoom() {
+        return imageRoom;
+    }
+
+    public MutableLiveData<Image> getImage() {
         return image;
     }
 }

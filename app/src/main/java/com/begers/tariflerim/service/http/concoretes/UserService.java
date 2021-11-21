@@ -14,7 +14,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserService {
-    private final String  BASE_URL = "http://10.0.2.2:9999/";
+    private final String  BASE_URL = "http://192.168.1.104:9999/";
+
 
     Gson gson = new GsonBuilder().setLenient().create();
 

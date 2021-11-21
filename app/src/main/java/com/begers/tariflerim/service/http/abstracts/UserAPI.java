@@ -24,5 +24,4 @@ public interface UserAPI {
 
     @POST("api/users/add")
     Completable add(@Body User user);
-
 }

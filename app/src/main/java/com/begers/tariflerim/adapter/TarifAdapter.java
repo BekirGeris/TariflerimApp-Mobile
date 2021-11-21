@@ -101,7 +101,7 @@ public class TarifAdapter extends RecyclerView.Adapter<TarifAdapter.TarifHolder>
         Bitmap bitmap = BitmapFactory.decodeByteArray(tarifRooms.get(position).getImage(),0,tarifRooms.get(position).getImage().length);
         holder.binding.recyclerViewImageView.setImageBitmap(bitmap);
          */
-        Picasso.get().load(tarifs.get(position).getImage()).into(holder.binding.recyclerViewImageView);
+        Picasso.get().load(tarifs.get(position).getImageURL()).into(holder.binding.recyclerViewImageView);
         holder.binding.recyclerViewTitle.setText(tarifs.get(position).getName());
         holder.binding.recyclerViewDescription.setText(tarifs.get(position).getTarif());
         holder.binding.postDate.setText(tarifs.get(position).getDate());

@@ -1,7 +1,6 @@
 package com.begers.tariflerim.model.api;
 
 import com.google.gson.annotations.SerializedName;
-import java.util.Date;
 
 public class Tarif {
 
@@ -21,14 +20,14 @@ public class Tarif {
     private String date;
 
     @SerializedName("image")
-    private String image;
+    private String imageURL;
 
-    public Tarif(String name, int userId, String date, String tarif, String image) {
+    public Tarif(String name, int userId, String date, String tarif, String imageURL) {
         this.name = name;
         this.userId = userId;
         this.date = date;
         this.tarif = tarif;
-        this.image = image;
+        this.imageURL = imageURL;
     }
 
     public int getId() {
@@ -55,8 +54,8 @@ public class Tarif {
         this.name = name;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageURL() {
+        return imageURL;
     }
 
     public String getTarif() {
@@ -67,8 +66,8 @@ public class Tarif {
         this.tarif = tarif;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public String getDate() {
