@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
@@ -30,16 +29,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.begers.tariflerim.adapter.TarifGritAdapter;
 import com.begers.tariflerim.databinding.FragmentNotificationsBinding;
 import com.begers.tariflerim.model.api.Image;
-import com.begers.tariflerim.model.roomdb.User;
+import com.begers.tariflerim.model.api.User;
 import com.begers.tariflerim.utiles.SingletonUser;
 import com.begers.tariflerim.viewmodel.NotificationsViewModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.UUID;
@@ -96,9 +95,9 @@ public class NotificationsFragment extends Fragment {
 
         binding.userName.setText(user.getFirstName());
 
-        viewModel.getByImage(user);
+        viewModel.getUserPP();
 
-        viewModel.getByTarifs(user);
+        viewModel.getByTarifs();
 
         observerLiveData();
     }
@@ -118,8 +117,19 @@ public class NotificationsFragment extends Fragment {
             }
         });*/
 
-        viewModel.getImage().observe(getViewLifecycleOwner(), image -> {
-            Picasso.get().load(image.getImageURL()).into(binding.circleImageView);
+        viewModel.getImagePP().observe(getViewLifecycleOwner(), image -> {
+            binding.proBar.setVisibility(View.VISIBLE);
+            Picasso.get().load(image.getImageURL()).into(binding.circleImageView, new Callback() {
+                @Override
+                public void onSuccess() {
+                    binding.proBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onError(Exception e) {
+
+                }
+            });
         });
     }
 
@@ -145,6 +155,7 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void save(){
+        binding.proBar.setVisibility(View.VISIBLE);
         /*
         Bitmap smallImage = makeSmallerImage(selectedImage,300);
 
@@ -169,7 +180,7 @@ public class NotificationsFragment extends Fragment {
                         newReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-                                viewModel.insertImage( new Image(user.getId(), uri.toString()));
+                                viewModel.insertImage(new Image(user.getId(), uri.toString()));
                             }
                         });
                     }
@@ -192,7 +203,6 @@ public class NotificationsFragment extends Fragment {
                     Intent intentFromResult = result.getData();
                     if (intentFromResult != null){
                         imageData = intentFromResult.getData(); //kullanıcının seçtiği resmin kaynağını verir.
-                        binding.circleImageView.setImageURI(imageData);
 
                         Toast.makeText(getActivity(), "Seçim Tamamlandı", Toast.LENGTH_LONG).show();
 

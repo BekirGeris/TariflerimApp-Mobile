@@ -2,6 +2,7 @@ package com.begers.tariflerim.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -12,7 +13,7 @@ import com.begers.tariflerim.databinding.RecyclerRowBinding;
 import com.begers.tariflerim.model.api.Image;
 import com.begers.tariflerim.model.api.Tarif;
 import com.begers.tariflerim.model.dtos.DataResult;
-import com.begers.tariflerim.model.roomdb.User;
+import com.begers.tariflerim.model.api.User;
 import com.begers.tariflerim.service.http.concoretes.ImageService;
 import com.begers.tariflerim.service.http.concoretes.UserService;
 import com.begers.tariflerim.service.local.abstracts.ImageDao;
@@ -21,6 +22,7 @@ import com.begers.tariflerim.service.local.concoretes.ImageDatabase;
 import com.begers.tariflerim.service.local.concoretes.UserDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -82,7 +84,8 @@ public class TarifAdapter extends RecyclerView.Adapter<TarifAdapter.TarifHolder>
 
     @Override
     public void onBindViewHolder(@NonNull TarifHolder holder, int position) {
-
+        holder.binding.proBarPP.setVisibility(View.VISIBLE);
+        holder.binding.proBar.setVisibility(View.VISIBLE);
         /*room
         compositeDisposable.add(userDao.getUserId(tarifs.get(position).getUserId())
                 .subscribeOn(Schedulers.io())
@@ -146,7 +149,18 @@ public class TarifAdapter extends RecyclerView.Adapter<TarifAdapter.TarifHolder>
                     @Override
                     public void onNext(DataResult<Image> imageDataResult) {
                         if (imageDataResult.getData() != null){
-                            Picasso.get().load(imageDataResult.getData().getImageURL()).into(holder.binding.circleUserPp);
+                            Picasso.get().load(imageDataResult.getData().getImageURL()).into(holder.binding.circleUserPp, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    holder.binding.proBarPP.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+
+                                }
+                            });
+
                         }
                     }
 
@@ -157,7 +171,7 @@ public class TarifAdapter extends RecyclerView.Adapter<TarifAdapter.TarifHolder>
 
                     @Override
                     public void onComplete() {
-
+                        //holder.binding.proBar.setVisibility(View.GONE);
                     }
                 });
 
@@ -166,7 +180,17 @@ public class TarifAdapter extends RecyclerView.Adapter<TarifAdapter.TarifHolder>
         holder.binding.recyclerViewImageView.setImageBitmap(bitmap);
          */
 
-        Picasso.get().load(tarifs.get(position).getImageURL()).into(holder.binding.recyclerViewImageView);
+        Picasso.get().load(tarifs.get(position).getImageURL()).into(holder.binding.recyclerViewImageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                holder.binding.proBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
         holder.binding.recyclerViewTitle.setText(tarifs.get(position).getName());
         holder.binding.recyclerViewDescription.setText(tarifs.get(position).getTarif());
         holder.binding.postDate.setText(tarifs.get(position).getDate());

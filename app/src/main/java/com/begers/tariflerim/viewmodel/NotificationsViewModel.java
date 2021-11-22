@@ -7,34 +7,38 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.begers.tariflerim.model.api.Image;
+import com.begers.tariflerim.model.api.Tarif;
 import com.begers.tariflerim.model.dtos.DataResult;
 import com.begers.tariflerim.model.dtos.Result;
 import com.begers.tariflerim.model.roomdb.ImageRoom;
-import com.begers.tariflerim.model.roomdb.TarifRoom;
-import com.begers.tariflerim.model.roomdb.User;
+import com.begers.tariflerim.model.api.User;
 import com.begers.tariflerim.service.http.concoretes.ImageService;
+import com.begers.tariflerim.service.http.concoretes.RecipeService;
 import com.begers.tariflerim.service.local.abstracts.ImageDao;
 import com.begers.tariflerim.service.local.abstracts.TarifDao;
 import com.begers.tariflerim.service.local.abstracts.UserDao;
 import com.begers.tariflerim.service.local.concoretes.ImageDatabase;
 import com.begers.tariflerim.service.local.concoretes.TarifDatabase;
 import com.begers.tariflerim.service.local.concoretes.UserDatabase;
+import com.begers.tariflerim.utiles.SingletonUser;
 
 import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class NotificationsViewModel extends AndroidViewModel {
 
     private ImageService imageService = new ImageService();
+    private RecipeService recipeService = new RecipeService();
 
-    private MutableLiveData<List<TarifRoom>> tarifs = new MutableLiveData<>();
+    private MutableLiveData<List<Tarif>> tarifs = new MutableLiveData<>();
     private MutableLiveData<ImageRoom> imageRoom = new MutableLiveData<>();
-    private MutableLiveData<Image> image = new MutableLiveData<>();
+    private MutableLiveData<Image> imagePP = new MutableLiveData<>();
+
+    private SingletonUser singletonUser;
+    private User user;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -49,6 +53,10 @@ public class NotificationsViewModel extends AndroidViewModel {
 
     public NotificationsViewModel(@NonNull Application application) {
         super(application);
+
+        singletonUser = SingletonUser.getInstance();
+        user = singletonUser.getSentUser();
+
         userDatabase = UserDatabase.getInstance(getApplication());
         userDao = userDatabase.userDao();
 
@@ -59,7 +67,7 @@ public class NotificationsViewModel extends AndroidViewModel {
         tarifDao = tarifDatabase.tarifDao();
     }
 
-    public void getByImage(User user){
+    public void getUserPP(){
         /*
         compositeDisposable.add(imageDao.getImageUserId(user.getId())
                 .subscribeOn(Schedulers.io())
@@ -81,7 +89,7 @@ public class NotificationsViewModel extends AndroidViewModel {
                     @Override
                     public void onNext(DataResult<Image> imageDataResult) {
                         if (imageDataResult.getData() != null){
-                            image.setValue(imageDataResult.getData());
+                            imagePP.setValue(imageDataResult.getData());
                         }
                         System.out.println("getImageWithUserId onNext");
                     }
@@ -98,14 +106,43 @@ public class NotificationsViewModel extends AndroidViewModel {
                 });
     }
 
-    public void getByTarifs(User user){
+    public void getByTarifs(){
+
+        /* room
         compositeDisposable.add(tarifDao.getTarifsUserId(user.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(t -> {
                     tarifs.setValue(t);
                 })
-        );
+        );*/
+
+        recipeService.getTarifsWithUserId(user.getId())
+                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(new Observer<DataResult<List<Tarif>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(DataResult<List<Tarif>> listDataResult) {
+                        tarifs.setValue(listDataResult.getData());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+
     }
 
     public void insertImage(Image image){
@@ -169,12 +206,12 @@ public class NotificationsViewModel extends AndroidViewModel {
 
                     @Override
                     public void onComplete() {
-
+                        getUserPP();
                     }
                 });
     }
 
-    public MutableLiveData<List<TarifRoom>> getTarifs() {
+    public MutableLiveData<List<Tarif>> getTarifs() {
         return tarifs;
     }
 
@@ -182,7 +219,7 @@ public class NotificationsViewModel extends AndroidViewModel {
         return imageRoom;
     }
 
-    public MutableLiveData<Image> getImage() {
-        return image;
+    public MutableLiveData<Image> getImagePP() {
+        return imagePP;
     }
 }

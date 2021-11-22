@@ -9,6 +9,16 @@
     android:orientation="vertical"
     android:layout_height="wrap_content">
 
+    <ProgressBar
+        android:id="@+id/proBar"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/circleUserPp"
         android:layout_margin="5dp"
@@ -18,13 +28,24 @@
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/ic_baseline_person_24"/>
 
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/proBarPP"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:layout_constraintBottom_toBottomOf="@+id/circleUserPp"
+        app:layout_constraintEnd_toEndOf="@+id/circleUserPp"
+        app:layout_constraintStart_toStartOf="@+id/circleUserPp"
+        app:layout_constraintTop_toTopOf="@+id/circleUserPp" />
+
     <ImageView
         android:id="@+id/recyclerView_imageView"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginTop="5dp"
         app:layout_constraintTop_toBottomOf="@+id/circleUserPp"
-        tools:layout_editor_absoluteX="5dp" />
+        tools:layout_editor_absoluteX="5dp"/>
+
 
     <ImageView
         android:id="@+id/imageView"
