@@ -77,6 +77,7 @@ public class HomeViewModel extends BaseViewModel {
 
                     @Override
                     public void onNext(DataResult<List<Tarif>> listDataResult) {
+                        Collections.reverse(listDataResult.getData());
                         tarifRs.setValue(listDataResult.getData());
                         System.out.println(listDataResult.getMessage());
                     }
