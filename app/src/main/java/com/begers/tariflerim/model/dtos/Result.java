@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class RecipeDto {
+public class Result {
 
     @SerializedName("message")
     private String message;
@@ -15,16 +15,6 @@ public class RecipeDto {
 
     @SerializedName("code")
     private int code;
-
-    @SerializedName("data")
-    private List<Tarif> data;
-
-    public RecipeDto(String message, boolean success, int code, List<Tarif> data) {
-        this.message = message;
-        this.success = success;
-        this.code = code;
-        this.data = data;
-    }
 
     public String getMessage() {
         return message;
@@ -48,13 +38,5 @@ public class RecipeDto {
 
     public void setCode(int code) {
         this.code = code;
-    }
-
-    public List<Tarif> getData() {
-        return data;
-    }
-
-    public void setData(List<Tarif> data) {
-        this.data = data;
     }
 }

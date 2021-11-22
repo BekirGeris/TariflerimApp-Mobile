@@ -9,6 +9,7 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.begers.tariflerim.model.api.Tarif;
+import com.begers.tariflerim.model.dtos.Result;
 import com.begers.tariflerim.model.roomdb.TarifRoom;
 import com.begers.tariflerim.service.http.concoretes.RecipeService;
 import com.begers.tariflerim.service.local.abstracts.TarifDao;
@@ -16,6 +17,7 @@ import com.begers.tariflerim.service.local.concoretes.TarifDatabase;
 import com.begers.tariflerim.view.ui.dashboard.DashboardFragmentDirections;
 
 import io.reactivex.CompletableObserver;
+import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -59,21 +61,26 @@ public class DashboardViewModel extends BaseViewModel {
         recipeService.add(tarif)
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(new CompletableObserver() {
+                .subscribe(new Observer<Result>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onComplete() {
-                        System.out.println("add");
+                    public void onNext(Result result) {
+                        System.out.println(result.getMessage());
                         NavDirections action = DashboardFragmentDirections.actionNavigationDashboardToNavigationHome();
                         Navigation.findNavController(view).navigate(action);
                     }
 
                     @Override
                     public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
 
                     }
                 });

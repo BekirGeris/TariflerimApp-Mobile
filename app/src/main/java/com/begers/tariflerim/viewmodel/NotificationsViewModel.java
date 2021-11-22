@@ -7,7 +7,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.begers.tariflerim.model.api.Image;
-import com.begers.tariflerim.model.dtos.ImageDto;
+import com.begers.tariflerim.model.dtos.DataResult;
+import com.begers.tariflerim.model.dtos.Result;
 import com.begers.tariflerim.model.roomdb.ImageRoom;
 import com.begers.tariflerim.model.roomdb.TarifRoom;
 import com.begers.tariflerim.model.roomdb.User;
@@ -21,7 +22,6 @@ import com.begers.tariflerim.service.local.concoretes.UserDatabase;
 
 import java.util.List;
 
-import io.reactivex.CompletableObserver;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -72,26 +72,28 @@ public class NotificationsViewModel extends AndroidViewModel {
         imageService.getImageWithUserId(user.getId())
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ImageDto>() {
+                .subscribe(new Observer<DataResult<Image>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        System.out.println("getImageWithUserId onSubscribe");
+
                     }
 
                     @Override
-                    public void onNext(ImageDto imageDto) {
-                        image.setValue(imageDto.getData());
+                    public void onNext(DataResult<Image> imageDataResult) {
+                        if (imageDataResult.getData() != null){
+                            image.setValue(imageDataResult.getData());
+                        }
                         System.out.println("getImageWithUserId onNext");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        System.out.println("getImageWithUserId onError");
+
                     }
 
                     @Override
                     public void onComplete() {
-                        System.out.println("getImageWithUserId onComplete");
+
                     }
                 });
     }
@@ -116,26 +118,60 @@ public class NotificationsViewModel extends AndroidViewModel {
         );
          */
 
-        imageService.add(image)
+        imageService.getImageWithUserId(image.getUserId())
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(new CompletableObserver() {
+                .subscribe(new Observer<DataResult<Image>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        System.out.println("image add onSubscribe");
+
                     }
 
                     @Override
-                    public void onComplete() {
-                        System.out.println("image add onComplete");
+                    public void onNext(DataResult<Image> imageDataResult) {
+                        if (imageDataResult.getData() == null){
+                            addImage(image);
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        System.out.println("image add onError");
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
                     }
                 });
 
+    }
+
+    private void addImage(Image image){
+        imageService.add(image)
+                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Result>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Result result) {
+                        System.out.println(result.getMessage());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     public MutableLiveData<List<TarifRoom>> getTarifs() {

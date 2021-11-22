@@ -7,14 +7,14 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.begers.tariflerim.model.dtos.UserDto;
+import com.begers.tariflerim.model.dtos.DataResult;
+import com.begers.tariflerim.model.dtos.Result;
 import com.begers.tariflerim.model.roomdb.User;
 import com.begers.tariflerim.service.http.concoretes.UserService;
 import com.begers.tariflerim.service.local.abstracts.UserDao;
 import com.begers.tariflerim.service.local.concoretes.UserDatabase;
 import com.begers.tariflerim.utiles.SingletonUser;
 
-import io.reactivex.CompletableObserver;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -54,17 +54,17 @@ public class LoginViewModel extends BaseViewModel {
         userService.getUserWithUserId(preferences.getInt("userId", -1))
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(new Observer<UserDto>() {
+                .subscribe(new Observer<DataResult<User>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(UserDto userDto) {
-                        if (userDto.getData() != null){
+                    public void onNext(DataResult<User> userDataResult) {
+                        if (userDataResult.getData() != null){
                             SingletonUser singletonUser = SingletonUser.getInstance();
-                            singletonUser.setSentUser(userDto.getData());
+                            singletonUser.setSentUser(userDataResult.getData());
                             isAccountActive.setValue(true);
                         }
                     }
@@ -95,30 +95,27 @@ public class LoginViewModel extends BaseViewModel {
         userService.getUserWithEmailAndPassword(email, password)
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(new Observer<UserDto>() {
+                .subscribe(new Observer<DataResult<User>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        System.out.println("onSubscribe");
+
                     }
 
                     @Override
-                    public void onNext(UserDto userDto) {
-                        System.out.println("onNext");
-
-                        if (userDto.getData() != null){
+                    public void onNext(DataResult<User> userDataResult) {
+                        System.out.println(userDataResult.getMessage());
+                        if (userDataResult.getData() != null){
                             isCheckEmailAndPassword.setValue(true);
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        System.out.println("onError");
 
                     }
 
                     @Override
                     public void onComplete() {
-                        System.out.println("onComplete");
 
                     }
                 });
@@ -141,31 +138,31 @@ public class LoginViewModel extends BaseViewModel {
         userService.getUserWithEmailAndPassword(email, password)
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(new Observer<UserDto>() {
+                .subscribe(new Observer<DataResult<User>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        System.out.println("onSubscribe");
+
                     }
 
                     @Override
-                    public void onNext(UserDto userDto) {
-                        System.out.println(userDto.getData() +" getUserWithEmailAndPassword");
-                        if (userDto.getData() != null){
+                    public void onNext(DataResult<User> userDataResult) {
+                        System.out.println(userDataResult.getMessage());
+                        if (userDataResult.getData() != null){
                             SingletonUser singletonUser = SingletonUser.getInstance();
-                            singletonUser.setSentUser(userDto.getData());
+                            singletonUser.setSentUser(userDataResult.getData());
                             isCheckEmailAndPassword.setValue(true);
-                            preferences.edit().putInt("userId", userDto.getData().getId()).apply();
+                            preferences.edit().putInt("userId", userDataResult.getData().getId()).apply();
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        System.out.println("onError");
+
                     }
 
                     @Override
                     public void onComplete() {
-                        System.out.println("onComplete");
+
                     }
                 });
     }
@@ -186,22 +183,27 @@ public class LoginViewModel extends BaseViewModel {
         userService.add(user)
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(new CompletableObserver() {
+                .subscribe(new Observer<Result>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        System.out.println("add user onSubscribe");
+
                     }
 
                     @Override
-                    public void onComplete() {
+                    public void onNext(Result result) {
                         isCheckRecord.setValue(true);
-                        System.out.println("add user onComplete");
+                        System.out.println(result.getMessage());
                         createSingletonUserWithEmailAndPassword(user.getEmail(), user.getPassword());
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        System.out.println("add user onError");
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
                     }
                 });
     }

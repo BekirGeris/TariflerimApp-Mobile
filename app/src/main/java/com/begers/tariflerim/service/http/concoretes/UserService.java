@@ -1,13 +1,14 @@
 package com.begers.tariflerim.service.http.concoretes;
 
-import com.begers.tariflerim.model.dtos.UserListDto;
-import com.begers.tariflerim.model.dtos.UserDto;
+import com.begers.tariflerim.model.dtos.DataResult;
+import com.begers.tariflerim.model.dtos.Result;
 import com.begers.tariflerim.model.roomdb.User;
 import com.begers.tariflerim.service.http.abstracts.UserAPI;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import io.reactivex.Completable;
+import java.util.List;
+
 import io.reactivex.Observable;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -26,19 +27,19 @@ public class UserService {
             .build()
             .create(UserAPI.class);
 
-    public Observable<UserListDto> getAll(){
+    public Observable<DataResult<List<User>>> getAll(){
         return api.getAll();
     }
 
-    public Observable<UserDto> getUserWithUserId(int userId){
+    public Observable<DataResult<User>> getUserWithUserId(int userId){
         return api.getUserWithUserId(userId);
     }
 
-    public Observable<UserDto> getUserWithEmailAndPassword(String email, String password){
+    public Observable<DataResult<User>> getUserWithEmailAndPassword(String email, String password){
         return api.getUserWithEmailAndPassword(email, password);
     }
 
-    public Completable add(User user){
+    public Observable<Result> add(User user){
         return api.add(user);
     }
 }

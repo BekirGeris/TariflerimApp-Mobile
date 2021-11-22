@@ -1,14 +1,15 @@
 package com.begers.tariflerim.service.http.concoretes;
 
 import com.begers.tariflerim.model.api.Image;
-import com.begers.tariflerim.model.dtos.ImageDto;
-import com.begers.tariflerim.model.dtos.ImageListDto;
+import com.begers.tariflerim.model.dtos.DataResult;
+import com.begers.tariflerim.model.dtos.Result;
 import com.begers.tariflerim.service.http.abstracts.ImageAPI;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-import io.reactivex.Completable;
+import java.util.List;
+
 import io.reactivex.Observable;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -27,19 +28,19 @@ public class ImageService {
             .build()
             .create(ImageAPI.class);
 
-    public Observable<ImageListDto> getAll(){
+    public Observable<DataResult<List<Image>>> getAll(){
         return api.getAll();
     }
 
-    public Observable<ImageDto> getImageWithUserId(int userId){
+    public Observable<DataResult<Image>> getImageWithUserId(int userId){
         return api.getImageWithUserId(userId);
     }
 
-    public Completable add(Image image){
+    public Observable<Result> add(Image image){
         return  api.add(image);
     }
 
-    public Completable delete(int id){
+    public Observable<Result> delete(int id){
         return api.delete(id);
     }
 

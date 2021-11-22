@@ -5,7 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.MutableLiveData;
 
 import com.begers.tariflerim.model.api.Tarif;
-import com.begers.tariflerim.model.dtos.RecipeDto;
+import com.begers.tariflerim.model.dtos.DataResult;
 import com.begers.tariflerim.model.roomdb.TarifRoom;
 import com.begers.tariflerim.service.http.concoretes.RecipeService;
 import com.begers.tariflerim.service.local.abstracts.TarifDao;
@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -68,26 +69,26 @@ public class HomeViewModel extends BaseViewModel {
         recipeService.getAll()
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(new Observer<RecipeDto>() {
+                .subscribe(new Observer<DataResult<List<Tarif>>>() {
                     @Override
-                    public void onSubscribe(@io.reactivex.annotations.NonNull io.reactivex.disposables.Disposable d) {
-                        System.out.println("onSubscribe");
+                    public void onSubscribe(Disposable d) {
+
                     }
 
                     @Override
-                    public void onNext(@io.reactivex.annotations.NonNull RecipeDto recipeDto) {
-                        tarifRs.setValue(recipeDto.getData());
-                        System.out.println("onNext");
+                    public void onNext(DataResult<List<Tarif>> listDataResult) {
+                        tarifRs.setValue(listDataResult.getData());
+                        System.out.println(listDataResult.getMessage());
                     }
 
                     @Override
-                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-                        e.printStackTrace();
+                    public void onError(Throwable e) {
+
                     }
 
                     @Override
                     public void onComplete() {
-                        System.out.println("onComplete");
+
                     }
                 });
     }

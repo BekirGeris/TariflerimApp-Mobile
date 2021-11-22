@@ -87,7 +87,6 @@ public class SignInFragment extends Fragment {
                 User user = new User(firstName, lastName, email, password);
 
                 viewModel.insertUser(user);
-                viewModel.createSingletonUserWithEmailAndPassword(email, password);
             }else {
                 Toast.makeText(getActivity(), "Parolaları aynı giriniz", Toast.LENGTH_SHORT).show();
             }
