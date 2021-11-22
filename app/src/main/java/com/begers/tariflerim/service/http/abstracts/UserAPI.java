@@ -2,7 +2,7 @@ package com.begers.tariflerim.service.http.abstracts;
 
 import com.begers.tariflerim.model.dtos.DataResult;
 import com.begers.tariflerim.model.dtos.Result;
-import com.begers.tariflerim.model.roomdb.User;
+import com.begers.tariflerim.model.api.User;
 
 import java.util.List;
 

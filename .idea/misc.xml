@@ -3,9 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/bekirgeris/AndroidStudioProjects/Tariflerim/app/src/main/res/drawable/animation.xml" value="0.1235" />
+        <entry key="..\:/Users/bekirgeris/AndroidStudioProjects/Tariflerim/app/src/main/res/drawable/like.xml" value="0.1235" />
+        <entry key="..\:/Users/bekirgeris/AndroidStudioProjects/Tariflerim/app/src/main/res/drawable/my_progress_indeterminate.xml" value="0.1235" />
         <entry key="..\:/Users/bekirgeris/AndroidStudioProjects/Tariflerim/app/src/main/res/layout/activity_login.xml" value="0.21195652173913043" />
+        <entry key="..\:/Users/bekirgeris/AndroidStudioProjects/Tariflerim/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/bekirgeris/AndroidStudioProjects/Tariflerim/app/src/main/res/layout/fragment_dashboard.xml" value="0.21195652173913043" />
-        <entry key="..\:/Users/bekirgeris/AndroidStudioProjects/Tariflerim/app/src/main/res/layout/recycler_row.xml" value="0.10916919959473151" />
+        <entry key="..\:/Users/bekirgeris/AndroidStudioProjects/Tariflerim/app/src/main/res/layout/fragment_login.xml" value="0.10916919959473151" />
+        <entry key="..\:/Users/bekirgeris/AndroidStudioProjects/Tariflerim/app/src/main/res/layout/fragment_notifications.xml" value="0.33" />
+        <entry key="..\:/Users/bekirgeris/AndroidStudioProjects/Tariflerim/app/src/main/res/layout/recycler_row.xml" value="0.4117647058823529" />
       </map>
     </option>
   </component>

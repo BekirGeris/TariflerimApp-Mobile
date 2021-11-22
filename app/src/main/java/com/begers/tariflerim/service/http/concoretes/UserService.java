@@ -2,7 +2,7 @@ package com.begers.tariflerim.service.http.concoretes;
 
 import com.begers.tariflerim.model.dtos.DataResult;
 import com.begers.tariflerim.model.dtos.Result;
-import com.begers.tariflerim.model.roomdb.User;
+import com.begers.tariflerim.model.api.User;
 import com.begers.tariflerim.service.http.abstracts.UserAPI;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

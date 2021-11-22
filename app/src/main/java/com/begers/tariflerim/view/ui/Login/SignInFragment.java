@@ -17,7 +17,7 @@ import androidx.navigation.Navigation;
 
 import com.begers.tariflerim.R;
 import com.begers.tariflerim.databinding.FragmentSigninBinding;
-import com.begers.tariflerim.model.roomdb.User;
+import com.begers.tariflerim.model.api.User;
 import com.begers.tariflerim.view.MainActivity;
 import com.begers.tariflerim.viewmodel.LoginViewModel;
 

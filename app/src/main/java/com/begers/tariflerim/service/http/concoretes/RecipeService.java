@@ -13,6 +13,7 @@ import io.reactivex.Observable;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Query;
 
 public class RecipeService {
     private final String  BASE_URL = "http://192.168.1.104:9999/";
@@ -28,6 +29,10 @@ public class RecipeService {
 
     public Observable<DataResult<List<Tarif>>> getAll(){
         return api.getAll();
+    }
+
+    public Observable<DataResult<List<Tarif>>> getTarifsWithUserId(@Query("userId") int userId){
+        return api.getTarifsWithUserId(userId);
     }
 
     public Observable<Result> add(Tarif tarif){

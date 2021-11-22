@@ -9,16 +9,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.begers.tariflerim.databinding.RecyclerGritBinding;
+import com.begers.tariflerim.model.api.Tarif;
 import com.begers.tariflerim.model.roomdb.TarifRoom;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class TarifGritAdapter extends RecyclerView.Adapter<TarifGritAdapter.TarifGritHolder> {
 
-    List<TarifRoom> tarifRooms;
+    List<Tarif> tarifs;
 
-    public TarifGritAdapter(List<TarifRoom> tarifRooms) {
-        this.tarifRooms = tarifRooms;
+    public TarifGritAdapter(List<Tarif> tarifs) {
+        this.tarifs = tarifs;
     }
 
     class TarifGritHolder extends RecyclerView.ViewHolder{
@@ -40,13 +42,16 @@ public class TarifGritAdapter extends RecyclerView.Adapter<TarifGritAdapter.Tari
 
     @Override
     public void onBindViewHolder(@NonNull TarifGritHolder holder, int position) {
+        /*room
         Bitmap bitmap = BitmapFactory.decodeByteArray(tarifRooms.get(position).getImage(),0, tarifRooms.get(position).getImage().length);
-        holder.binding.imageViewGrit.setImageBitmap(bitmap);
+        holder.binding.imageViewGrit.setImageBitmap(bitmap);*/
+
+        Picasso.get().load(tarifs.get(position).getImageURL()).into(holder.binding.imageViewGrit);
     }
 
     @Override
     public int getItemCount() {
-        return tarifRooms.size();
+        return tarifs.size();
     }
 
 
