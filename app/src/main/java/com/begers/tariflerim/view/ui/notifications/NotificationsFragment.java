@@ -61,14 +61,12 @@ public class NotificationsFragment extends Fragment {
     private Uri imageData;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
-    private FirebaseFirestore firebaseFirestore;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         firebaseStorage = FirebaseStorage.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
         storageReference = firebaseStorage.getReference();
 
         registerLauncher();

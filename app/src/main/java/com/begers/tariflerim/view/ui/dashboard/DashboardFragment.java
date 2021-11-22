@@ -59,7 +59,6 @@ public class DashboardFragment extends Fragment {
     private Uri imageData;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
-    private FirebaseFirestore firebaseFirestore;
 
     public DashboardFragment() {
 
@@ -73,7 +72,6 @@ public class DashboardFragment extends Fragment {
         user = singletonUser.getSentUser();
 
         firebaseStorage = FirebaseStorage.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
         storageReference = firebaseStorage.getReference();
 
         registerLauncher();

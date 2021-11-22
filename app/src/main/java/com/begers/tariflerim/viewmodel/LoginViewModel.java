@@ -196,6 +196,7 @@ public class LoginViewModel extends BaseViewModel {
                     public void onComplete() {
                         isCheckRecord.setValue(true);
                         System.out.println("add user onComplete");
+                        createSingletonUserWithEmailAndPassword(user.getEmail(), user.getPassword());
                     }
 
                     @Override
