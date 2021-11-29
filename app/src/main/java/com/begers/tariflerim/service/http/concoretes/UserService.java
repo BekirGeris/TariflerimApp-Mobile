@@ -4,7 +4,7 @@ import com.begers.tariflerim.model.dtos.DataResult;
 import com.begers.tariflerim.model.dtos.Result;
 import com.begers.tariflerim.model.api.User;
 import com.begers.tariflerim.service.http.abstracts.UserAPI;
-import com.begers.tariflerim.utiles.Contant;
+import com.begers.tariflerim.utiles.Constants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -19,7 +19,7 @@ public class UserService {
     Gson gson = new GsonBuilder().setLenient().create();
 
     private UserAPI api = new Retrofit.Builder()
-            .baseUrl(Contant.BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
